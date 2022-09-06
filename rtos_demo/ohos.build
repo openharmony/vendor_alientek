@@ -1,0 +1,10 @@
+{
+  "parts": {
+    "product_rtos_demo": {
+      "module_list": [
+        "//vendor/alientek/rtos_demo:rtos_demo"
+      ]
+    }
+  },
+  "subsystem": "product_rtos_demo"
+}
