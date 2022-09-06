@@ -1,0 +1,20 @@
+{
+    "product_name": "rtos_demo",
+    "ohos_version": "OpenHarmony 3.0",
+    "type":"mini",
+    "version": "3.0",
+    "device_company": "soc",
+    "board": "st/stm32f407zg",
+    "kernel_type": "uniproton",
+    "kernel_version": "3.0.0",
+    "subsystems": [
+      {
+        "subsystem": "kernel",
+        "components": [
+          { "component": "uniproton", "features":[] }
+        ]
+      }
+    ],
+    "third_party_dir": "",
+    "product_adapter_dir": "//vendor/alientek/rtos_demo/hals"
+  }
