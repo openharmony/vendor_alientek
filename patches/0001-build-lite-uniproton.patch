@@ -1,0 +1,94 @@
+From e99b760b67da75d391488a922f4a69faa9a84b40 Mon Sep 17 00:00:00 2001
+From: zhushengle <zhushengle@huawei.com>
+Date: Mon, 5 Sep 2022 20:34:17 +0800
+Subject: [PATCH] =?UTF-8?q?feat:=20=E6=94=AF=E6=8C=81uniproton=E5=86=85?=
+ =?UTF-8?q?=E6=A0=B8?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: zhushengle <zhushengle@huawei.com>
+Change-Id: I0369e2bfe650b18ddd39481ebcd33b4bc1461f4f
+---
+ config/BUILD.gn                     | 5 +++++
+ config/BUILDCONFIG.gn               | 4 ++--
+ config/component/lite_component.gni | 4 ++--
+ ohos_var.gni                        | 2 +-
+ 4 files changed, 10 insertions(+), 5 deletions(-)
+
+diff --git a/config/BUILD.gn b/config/BUILD.gn
+index b101f43..24b77d5 100644
+--- a/config/BUILD.gn
++++ b/config/BUILD.gn
+@@ -37,6 +37,11 @@ config("kernel_macros") {
+       "__LITEOS__",
+       "__LITEOS_M__",
+     ]
++  } else if (ohos_kernel_type == "uniproton") {
++    defines = [
++      "__uniproton__",
++      "__UNIPROTON__",
++    ]
+   } else if (ohos_kernel_type == "linux") {
+     defines = [
+       "__linux__",
+diff --git a/config/BUILDCONFIG.gn b/config/BUILDCONFIG.gn
+index e53cddf..89abbe3 100755
+--- a/config/BUILDCONFIG.gn
++++ b/config/BUILDCONFIG.gn
+@@ -41,7 +41,7 @@ if (defined(board_configed_sysroot) && board_configed_sysroot != "") {
+ }
+ 
+ # Only gcc available for liteos_m.
+-if (ohos_kernel_type == "liteos_m" || ohos_kernel_type == "linux") {
++if (ohos_kernel_type == "liteos_m" || ohos_kernel_type == "uniproton" || ohos_kernel_type == "linux") {
+   use_board_toolchain = true
+ }
+ 
+@@ -154,7 +154,7 @@ default_shared_library_configs =
+     default_target_configs + [ "//build/lite/config:shared_library_config" ]
+ default_static_library_configs = default_target_configs
+ default_executable_configs = default_static_library_configs
+-if (ohos_kernel_type != "liteos_m") {
++if (ohos_kernel_type != "liteos_m" && ohos_kernel_type != "uniproton") {
+   default_static_library_configs += [ "//build/lite/config:static_pie_config" ]
+   default_executable_configs += [ "//build/lite/config:static_pie_config" ]
+   default_executable_configs += [ "//build/lite/config:pie_executable_config" ]
+diff --git a/config/component/lite_component.gni b/config/component/lite_component.gni
+index 9bcbdee..74ac10e 100644
+--- a/config/component/lite_component.gni
++++ b/config/component/lite_component.gni
+@@ -19,7 +19,7 @@ template("lite_library") {
+   target_type = invoker.target_type
+   shared_lib = target_type == "shared_library"
+ 
+-  if (shared_lib && ohos_kernel_type == "liteos_m") {
++  if (shared_lib && (ohos_kernel_type == "liteos_m" || ohos_kernel_type == "uniproton")) {
+     group(target_name) {
+       if (defined(invoker.sources)) {
+         assert(invoker.sources != "")
+@@ -57,7 +57,7 @@ template("lite_library") {
+       if (shared_lib) {
+         cflags += [ "-fPIC" ]
+         cflags_cc += [ "-fPIC" ]
+-      } else if (!shared_lib && ohos_kernel_type != "liteos_m") {
++      } else if (!shared_lib && (ohos_kernel_type != "liteos_m" && ohos_kernel_type != "uniproton")) {
+         cflags += [ "-fPIE" ]
+         cflags_cc += [ "-fPIE" ]
+       }
+diff --git a/ohos_var.gni b/ohos_var.gni
+index 4c9f72c..5be6fba 100755
+--- a/ohos_var.gni
++++ b/ohos_var.gni
+@@ -64,7 +64,7 @@ if (product_config_path != "") {
+   board_name = product_config.board
+   device_company = product_config.device_company
+ 
+-  # Supported kernel: "liteos_a", "liteos_m", "linux"
++  # Supported kernel: "liteos_a", "liteos_m", "linux", "uniproton"
+   ohos_kernel_type = product_config.kernel_type
+   if (defined(product_config.kernel_is_prebuilt)) {
+     ohos_kernel_is_prebuilt = product_config.kernel_is_prebuilt
+-- 
+2.17.1
+
