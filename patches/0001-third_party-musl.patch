@@ -1,14 +1,9 @@
-From 3cbbdb7e26d6c9d2151b64dcf7c2a8d5d30d0978 Mon Sep 17 00:00:00 2001
-From: zhangdengyu <zhangdengyu2@huawei.com>
-Date: Wed, 7 Sep 2022 18:55:39 +0800
-Subject: [PATCH] =?UTF-8?q?1.=20=E5=A2=9E=E5=8A=A0uniproton=E5=86=85?=
- =?UTF-8?q?=E6=A0=B8?=
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+From 92331eafb5defd179fde9b4b84cff0943c18b131 Mon Sep 17 00:00:00 2001
+From: wangchen <253227059@qq.com>
+Date: Fri, 9 Sep 2022 09:37:19 +0000
+Subject: [PATCH] Signed-off-by: wangchen <253227059@qq.com> Change-Id:
+ I2466b069d9d208548cb454c6c00b59259cf1faeb
 
-Signed-off-by: zhangdengyu <zhangdengyu2@huawei.com>
-Change-Id: I468156a3d87bee1ba66e9fe27677fd15ddcbeed0
 ---
  BUILD.gn                                      |   17 +-
  porting/uniproton/include/__strerror.h        |  105 +
@@ -234,7 +229,7 @@ Change-Id: I468156a3d87bee1ba66e9fe27677fd15ddcbeed0
  porting/uniproton/include/wctype.h            |   79 +
  porting/uniproton/include/wordexp.h           |   41 +
  porting/uniproton/kernel/BUILD.gn             |   66 +
- porting/uniproton/kernel/musl.gni             |   62 +
+ porting/uniproton/kernel/musl.gni             |   68 +
  .../kernel/src/__ctype_get_mb_cur_max.c       |    7 +
  .../uniproton/kernel/src/__errno_location.c   |    9 +
  porting/uniproton/kernel/src/__lockfile.c     |   16 +
@@ -253,19 +248,25 @@ Change-Id: I468156a3d87bee1ba66e9fe27677fd15ddcbeed0
  porting/uniproton/kernel/src/memset.c         |   90 +
  porting/uniproton/kernel/src/rand.c           |   12 +
  porting/uniproton/kernel/src/random.c         |  134 +
+ porting/uniproton/kernel/src/strchr.c         |    7 +
+ porting/uniproton/kernel/src/strchrnul.c      |   28 +
  porting/uniproton/kernel/src/strcmp.c         |    7 +
+ porting/uniproton/kernel/src/strcpy.c         |   10 +
+ porting/uniproton/kernel/src/strcspn.c        |   17 +
+ porting/uniproton/kernel/src/strdup.c         |   10 +
  porting/uniproton/kernel/src/strerror.c       |   36 +
  porting/uniproton/kernel/src/strlen.c         |   22 +
  porting/uniproton/kernel/src/strncmp.c        |    9 +
  porting/uniproton/kernel/src/strncpy.c        |   11 +
  porting/uniproton/kernel/src/strnlen.c        |    7 +
+ porting/uniproton/kernel/src/strspn.c         |   20 +
  porting/uniproton/kernel/src/vfprintf.c       |  726 ++++
  porting/uniproton/kernel/src/vsnprintf.c      |   74 +
  porting/uniproton/kernel/src/vsprintf.c       |    7 +
  porting/uniproton/kernel/src/wcrtomb.c        |   39 +
  porting/uniproton/kernel/src/wctomb.c         |    8 +
  porting/uniproton/kernel/src/write.c          |    8 +
- 255 files changed, 21103 insertions(+), 5 deletions(-)
+ 261 files changed, 21201 insertions(+), 5 deletions(-)
  create mode 100644 porting/uniproton/include/__strerror.h
  create mode 100644 porting/uniproton/include/aio.h
  create mode 100644 porting/uniproton/include/alloca.h
@@ -508,12 +509,18 @@ Change-Id: I468156a3d87bee1ba66e9fe27677fd15ddcbeed0
  create mode 100644 porting/uniproton/kernel/src/memset.c
  create mode 100644 porting/uniproton/kernel/src/rand.c
  create mode 100644 porting/uniproton/kernel/src/random.c
+ create mode 100755 porting/uniproton/kernel/src/strchr.c
+ create mode 100755 porting/uniproton/kernel/src/strchrnul.c
  create mode 100644 porting/uniproton/kernel/src/strcmp.c
+ create mode 100755 porting/uniproton/kernel/src/strcpy.c
+ create mode 100755 porting/uniproton/kernel/src/strcspn.c
+ create mode 100755 porting/uniproton/kernel/src/strdup.c
  create mode 100644 porting/uniproton/kernel/src/strerror.c
  create mode 100644 porting/uniproton/kernel/src/strlen.c
  create mode 100644 porting/uniproton/kernel/src/strncmp.c
  create mode 100644 porting/uniproton/kernel/src/strncpy.c
  create mode 100644 porting/uniproton/kernel/src/strnlen.c
+ create mode 100755 porting/uniproton/kernel/src/strspn.c
  create mode 100644 porting/uniproton/kernel/src/vfprintf.c
  create mode 100644 porting/uniproton/kernel/src/vsnprintf.c
  create mode 100644 porting/uniproton/kernel/src/vsprintf.c
@@ -21171,10 +21178,10 @@ index 00000000..814d31b2
 +
 diff --git a/porting/uniproton/kernel/musl.gni b/porting/uniproton/kernel/musl.gni
 new file mode 100644
-index 00000000..7a230ba4
+index 00000000..02b065dc
 --- /dev/null
 +++ b/porting/uniproton/kernel/musl.gni
-@@ -0,0 +1,62 @@
+@@ -0,0 +1,68 @@
 +# Copyright (c) 2022-2022 Huawei Device Co., Ltd. All rights reserved.
 +#
 +# Redistribution and use in source and binary forms, with or without modification,
@@ -21230,10 +21237,16 @@ index 00000000..7a230ba4
 +  "$MUSLPORTINGDIR/src/rand.c",
 +  "$MUSLPORTINGDIR/src/random.c",
 +  "$MUSLPORTINGDIR/src/isdigit.c",
-+  "$MUSLPORTINGDIR/src/isxdigit.c", # 来自third_party/musl/src/ctype
++  "$MUSLPORTINGDIR/src/isxdigit.c",
 +  "$MUSLPORTINGDIR/src/strncpy.c",
 +  "$MUSLPORTINGDIR/src/atoi.c",
 +  "$MUSLPORTINGDIR/src/strcmp.c",
++  "$MUSLPORTINGDIR/src/strchr.c",
++  "$MUSLPORTINGDIR/src/strcspn.c",
++  "$MUSLPORTINGDIR/src/strdup.c",
++  "$MUSLPORTINGDIR/src/strchrnul.c",
++  "$MUSLPORTINGDIR/src/strcpy.c",
++  "$MUSLPORTINGDIR/src/strspn.c",
 +  "$MUSLPORTINGDIR/src/strncmp.c",
 +  "$MUSLPORTINGDIR/src/memcmp.c",
 +]
@@ -22126,6 +22139,53 @@ index 00000000..6c1e658b
 +	// LOS_IntRestore(intSave);
 +	return k;
 +}
+diff --git a/porting/uniproton/kernel/src/strchr.c b/porting/uniproton/kernel/src/strchr.c
+new file mode 100755
+index 00000000..3cbc828b
+--- /dev/null
++++ b/porting/uniproton/kernel/src/strchr.c
+@@ -0,0 +1,7 @@
++#include <string.h>
++
++char *strchr(const char *s, int c)
++{
++	char *r = __strchrnul(s, c);
++	return *(unsigned char *)r == (unsigned char)c ? r : 0;
++}
+diff --git a/porting/uniproton/kernel/src/strchrnul.c b/porting/uniproton/kernel/src/strchrnul.c
+new file mode 100755
+index 00000000..39e2635b
+--- /dev/null
++++ b/porting/uniproton/kernel/src/strchrnul.c
+@@ -0,0 +1,28 @@
++#include <string.h>
++#include <stdint.h>
++#include <limits.h>
++
++#define ALIGN (sizeof(size_t))
++#define ONES ((size_t)-1/UCHAR_MAX)
++#define HIGHS (ONES * (UCHAR_MAX/2+1))
++#define HASZERO(x) ((x)-ONES & ~(x) & HIGHS)
++
++char *__strchrnul(const char *s, int c)
++{
++	c = (unsigned char)c;
++	if (!c) return (char *)s + strlen(s);
++
++#ifdef __GNUC__
++	typedef size_t __attribute__((__may_alias__)) word;
++	const word *w;
++	for (; (uintptr_t)s % ALIGN; s++)
++		if (!*s || *(unsigned char *)s == c) return (char *)s;
++	size_t k = ONES * c;
++	for (w = (void *)s; !HASZERO(*w) && !HASZERO(*w^k); w++);
++	s = (void *)w;
++#endif
++	for (; *s && *(unsigned char *)s != c; s++);
++	return (char *)s;
++}
++
++weak_alias(__strchrnul, strchrnul);
 diff --git a/porting/uniproton/kernel/src/strcmp.c b/porting/uniproton/kernel/src/strcmp.c
 new file mode 100644
 index 00000000..808bd837
@@ -22138,6 +22198,61 @@ index 00000000..808bd837
 +{
 +	for (; *l==*r && *l; l++, r++);
 +	return *(unsigned char *)l - *(unsigned char *)r;
++}
+diff --git a/porting/uniproton/kernel/src/strcpy.c b/porting/uniproton/kernel/src/strcpy.c
+new file mode 100755
+index 00000000..abc8ef2d
+--- /dev/null
++++ b/porting/uniproton/kernel/src/strcpy.c
+@@ -0,0 +1,10 @@
++#include <string.h>
++#ifdef LOSCFG_KERNEL_LMS
++__attribute__((no_sanitize_address)) char *__strcpy(char *restrict dest, const char *restrict src)
++#else
++char *strcpy(char *restrict dest, const char *restrict src)
++#endif
++{
++	for (; (*dest=*src); src++, dest++);
++	return dest;
++}
+diff --git a/porting/uniproton/kernel/src/strcspn.c b/porting/uniproton/kernel/src/strcspn.c
+new file mode 100755
+index 00000000..ac7c35b3
+--- /dev/null
++++ b/porting/uniproton/kernel/src/strcspn.c
+@@ -0,0 +1,17 @@
++#include "../include/string.h"
++
++#define BITOP(a,b,op) \
++ ((a)[(size_t)(b)/(8*sizeof *(a))] op (size_t)1<<((size_t)(b)%(8*sizeof *(a))))
++
++size_t strcspn(const char *s, const char *c)
++{
++	const char *a = s;
++	size_t byteset[32/sizeof(size_t)];
++
++	if (!c[0] || !c[1]) return (char *)__strchrnul(s, *c) - a;
++
++	memset(byteset, 0, sizeof byteset);
++	for (; *c && BITOP(byteset, *(unsigned char *)c, |=); c++);
++	for (; *s && !BITOP(byteset, *(unsigned char *)s, &); s++);
++	return s-a;
++}
+diff --git a/porting/uniproton/kernel/src/strdup.c b/porting/uniproton/kernel/src/strdup.c
+new file mode 100755
+index 00000000..d4c27449
+--- /dev/null
++++ b/porting/uniproton/kernel/src/strdup.c
+@@ -0,0 +1,10 @@
++#include <stdlib.h>
++#include <string.h>
++
++char *strdup(const char *s)
++{
++	size_t l = strlen(s);
++	char *d = malloc(l+1);
++	if (!d) return NULL;
++	return memcpy(d, s, l+1);
 +}
 diff --git a/porting/uniproton/kernel/src/strerror.c b/porting/uniproton/kernel/src/strerror.c
 new file mode 100644
@@ -22254,6 +22369,32 @@ index 00000000..6442eb79
 +{
 +	const char *p = memchr(s, 0, n);
 +	return p ? p-s : n;
++}
+diff --git a/porting/uniproton/kernel/src/strspn.c b/porting/uniproton/kernel/src/strspn.c
+new file mode 100755
+index 00000000..9543dad0
+--- /dev/null
++++ b/porting/uniproton/kernel/src/strspn.c
+@@ -0,0 +1,20 @@
++#include <string.h>
++
++#define BITOP(a,b,op) \
++ ((a)[(size_t)(b)/(8*sizeof *(a))] op (size_t)1<<((size_t)(b)%(8*sizeof *(a))))
++
++size_t strspn(const char *s, const char *c)
++{
++	const char *a = s;
++	size_t byteset[32/sizeof(size_t)] = { 0 };
++
++	if (!c[0]) return 0;
++	if (!c[1]) {
++		for (; *s == *c; s++);
++		return s-a;
++	}
++
++	for (; *c && BITOP(byteset, *(unsigned char *)c, |=); c++);
++	for (; *s && BITOP(byteset, *(unsigned char *)s, &); s++);
++	return s-a;
 +}
 diff --git a/porting/uniproton/kernel/src/vfprintf.c b/porting/uniproton/kernel/src/vfprintf.c
 new file mode 100644
