@@ -1,20 +1,16 @@
-From 63b8eafc808d1e5fd58cc6f6783182cb73cfd936 Mon Sep 17 00:00:00 2001
-From: zhangdengyu <zhangdengyu2@huawei.com>
-Date: Thu, 8 Sep 2022 22:08:01 +0800
-Subject: [PATCH] =?UTF-8?q?=E5=A2=9E=E5=8A=A0=E7=BD=91=E7=BB=9C?=
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+From 5b5f57ef41c4d17f76e1fe596a8ae1aca23db610 Mon Sep 17 00:00:00 2001
+From: wangchen <253227059@qq.com>
+Date: Fri, 9 Sep 2022 09:31:47 +0000
+Subject: [PATCH] Signed-off-by: wangchen <253227059@qq.com> Change-Id:
+ I6aaf0fb47e46f704916d30662baf8453b7815449
 
-Signed-off-by: zhangdengyu <zhangdengyu2@huawei.com>
-Change-Id: I710354e2690321ee3bf783280f2e3749bf8f7180
 ---
  stm32f407zg/BUILD.gn                          |   30 +
  stm32f407zg/ohos.build                        |   10 +
  stm32f407zg/uniproton/BUILD.gn                |   35 +
  stm32f407zg/uniproton/board/ARCH/ethernetif.c |  132 +
  stm32f407zg/uniproton/board/ARCH/ethernetif.h |   18 +
- stm32f407zg/uniproton/board/BUILD.gn          |  124 +
+ stm32f407zg/uniproton/board/BUILD.gn          |  128 +
  stm32f407zg/uniproton/board/CORE/core_cm4.h   | 1772 ++++
  .../uniproton/board/CORE/core_cm4_simd.h      |  673 ++
  .../uniproton/board/CORE/core_cmFunc.h        |  636 ++
@@ -91,6 +87,10 @@ Change-Id: I710354e2690321ee3bf783280f2e3749bf8f7180
  .../src/stm32f4xx_wwdg.c                      |  307 +
  .../board/HARDWARE/ETHERNET/lan8720.c         |  266 +
  .../board/HARDWARE/ETHERNET/lan8720.h         |   39 +
+ .../uniproton/board/HARDWARE/SPI/spi.c        |   67 +
+ .../uniproton/board/HARDWARE/SPI/spi.h        |   25 +
+ .../uniproton/board/HARDWARE/W25QXX/w25qxx.c  |  216 +
+ .../uniproton/board/HARDWARE/W25QXX/w25qxx.h  |   89 +
  stm32f407zg/uniproton/board/LWIP/lwip_comm.c  |  282 +
  stm32f407zg/uniproton/board/LWIP/lwip_comm.h  |   46 +
  stm32f407zg/uniproton/board/SYSTEM/sys/sys.c  |   63 +
@@ -108,7 +108,7 @@ Change-Id: I710354e2690321ee3bf783280f2e3749bf8f7180
  stm32f407zg/uniproton/board/rtos.ld           |  117 +
  stm32f407zg/uniproton/board/target_config.h   |  107 +
  stm32f407zg/uniproton/config.gni              |   96 +
- 99 files changed, 70115 insertions(+)
+ 103 files changed, 70516 insertions(+)
  create mode 100644 stm32f407zg/BUILD.gn
  create mode 100644 stm32f407zg/ohos.build
  create mode 100644 stm32f407zg/uniproton/BUILD.gn
@@ -191,6 +191,10 @@ Change-Id: I710354e2690321ee3bf783280f2e3749bf8f7180
  create mode 100644 stm32f407zg/uniproton/board/FWLIB/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_wwdg.c
  create mode 100644 stm32f407zg/uniproton/board/HARDWARE/ETHERNET/lan8720.c
  create mode 100644 stm32f407zg/uniproton/board/HARDWARE/ETHERNET/lan8720.h
+ create mode 100755 stm32f407zg/uniproton/board/HARDWARE/SPI/spi.c
+ create mode 100755 stm32f407zg/uniproton/board/HARDWARE/SPI/spi.h
+ create mode 100755 stm32f407zg/uniproton/board/HARDWARE/W25QXX/w25qxx.c
+ create mode 100755 stm32f407zg/uniproton/board/HARDWARE/W25QXX/w25qxx.h
  create mode 100644 stm32f407zg/uniproton/board/LWIP/lwip_comm.c
  create mode 100644 stm32f407zg/uniproton/board/LWIP/lwip_comm.h
  create mode 100644 stm32f407zg/uniproton/board/SYSTEM/sys/sys.c
@@ -467,10 +471,10 @@ index 0000000..71b2847
 +#endif
 diff --git a/stm32f407zg/uniproton/board/BUILD.gn b/stm32f407zg/uniproton/board/BUILD.gn
 new file mode 100644
-index 0000000..607a146
+index 0000000..0d6c1b5
 --- /dev/null
 +++ b/stm32f407zg/uniproton/board/BUILD.gn
-@@ -0,0 +1,124 @@
+@@ -0,0 +1,128 @@
 +# Copyright (c) 2022-2022 Huawei Device Co., Ltd. All rights reserved.
 +#
 +# Redistribution and use in source and binary forms, with or without modification,
@@ -552,6 +556,8 @@ index 0000000..607a146
 +    "USER/dprintf.c",
 +    "USER/stm32f4xx_it.c",
 +    "USER/system_stm32f4xx.c",
++    "HARDWARE/SPI/spi.c",
++    "HARDWARE/W25QXX/w25qxx.c",
 +  ]
 +  
 +  include_dirs = [
@@ -564,6 +570,8 @@ index 0000000..607a146
 +    "SYSTEM/sys",
 +    "SYSTEM/usart",
 +    "USER",
++    "HARDWARE/SPI",
++    "HARDWARE/W25QXX",
 +  ]
 +}
 +
@@ -51695,7 +51703,7 @@ index 0000000..0a08406
 +/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
 diff --git a/stm32f407zg/uniproton/board/FWLIB/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_spi.c b/stm32f407zg/uniproton/board/FWLIB/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_spi.c
 new file mode 100644
-index 0000000..f250aad
+index 0000000..394efce
 --- /dev/null
 +++ b/stm32f407zg/uniproton/board/FWLIB/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_spi.c
 @@ -0,0 +1,1319 @@
@@ -51859,7 +51867,7 @@ index 0000000..f250aad
 +/* Includes ------------------------------------------------------------------*/
 +#include "stm32f4xx_spi.h"
 +#include "stm32f4xx_rcc.h"
-+
++#include "stm32f4xx_conf.h"
 +/** @addtogroup STM32F4xx_StdPeriph_Driver
 +  * @{
 +  */
@@ -58757,6 +58765,427 @@ index 0000000..28b44e3
 +void ETH_Mem_Free(void);
 +void ETH_IRQHandler(void);
 +#endif 
++
+diff --git a/stm32f407zg/uniproton/board/HARDWARE/SPI/spi.c b/stm32f407zg/uniproton/board/HARDWARE/SPI/spi.c
+new file mode 100755
+index 0000000..e8b3288
+--- /dev/null
++++ b/stm32f407zg/uniproton/board/HARDWARE/SPI/spi.c
+@@ -0,0 +1,67 @@
++#include "spi.h"
++#include "stm32f4xx_conf.h"
++
++void SPI1_Init(void)
++{
++    GPIO_InitTypeDef  GPIO_InitStructure;
++    SPI_InitTypeDef  SPI_InitStructure;
++
++    RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA, ENABLE);
++    RCC_APB2PeriphClockCmd(RCC_APB2Periph_SPI1, ENABLE);
++
++    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_3|GPIO_Pin_4|GPIO_Pin_5;
++    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;
++    GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
++    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;
++    GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;
++    GPIO_Init(GPIOB, &GPIO_InitStructure);
++
++    GPIO_PinAFConfig(GPIOB,GPIO_PinSource3,GPIO_AF_SPI1);
++    GPIO_PinAFConfig(GPIOB,GPIO_PinSource4,GPIO_AF_SPI1);
++    GPIO_PinAFConfig(GPIOB,GPIO_PinSource5,GPIO_AF_SPI1);
++
++    RCC_APB2PeriphResetCmd(RCC_APB2Periph_SPI1,ENABLE);
++    RCC_APB2PeriphResetCmd(RCC_APB2Periph_SPI1,DISABLE);
++
++    SPI_InitStructure.SPI_Direction = SPI_Direction_2Lines_FullDuplex;
++    SPI_InitStructure.SPI_Mode = SPI_Mode_Master;
++    SPI_InitStructure.SPI_DataSize = SPI_DataSize_8b;
++    SPI_InitStructure.SPI_CPOL = SPI_CPOL_High;
++    SPI_InitStructure.SPI_CPHA = SPI_CPHA_2Edge;
++    SPI_InitStructure.SPI_NSS = SPI_NSS_Soft;
++    SPI_InitStructure.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_256;
++    SPI_InitStructure.SPI_FirstBit = SPI_FirstBit_MSB;
++    SPI_InitStructure.SPI_CRCPolynomial = 7;
++    SPI_Init(SPI1, &SPI_InitStructure);
++
++    SPI_Cmd(SPI1, ENABLE);
++
++    SPI1_ReadWriteByte(0xff);
++}
++
++void SPI1_SetSpeed(u8 SPI_BaudRatePrescaler)
++{
++    assert_param(IS_SPI_BAUDRATE_PRESCALER(SPI_BaudRatePrescaler));
++    SPI1->CR1&=0XFFC7;
++    SPI1->CR1|=SPI_BaudRatePrescaler;
++    SPI_Cmd(SPI1,ENABLE);
++}
++
++u8 SPI1_ReadWriteByte(u8 TxData)
++{
++    while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_TXE) == RESET){}
++
++    SPI_I2S_SendData(SPI1, TxData);
++
++    while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_RXNE) == RESET){}
++
++    return SPI_I2S_ReceiveData(SPI1);
++}
++
++
++
++
++
++
++
++
+diff --git a/stm32f407zg/uniproton/board/HARDWARE/SPI/spi.h b/stm32f407zg/uniproton/board/HARDWARE/SPI/spi.h
+new file mode 100755
+index 0000000..f219e31
+--- /dev/null
++++ b/stm32f407zg/uniproton/board/HARDWARE/SPI/spi.h
+@@ -0,0 +1,25 @@
++#ifndef __SPI_H
++#define __SPI_H
++#include "sys.h"
++//////////////////////////////////////////////////////////////////////////////////	 
++//本程序只供学习使用，未经作者许可，不得用于其它任何用途
++//ALIENTEK STM32F407开发板
++//SPI 驱动代码	   
++//正点原子@ALIENTEK
++//技术论坛:www.openedv.com
++//创建日期:2014/5/6
++//版本：V1.0
++//版权所有，盗版必究。
++//Copyright(C) 广州市星翼电子科技有限公司 2014-2024
++//All rights reserved									  
++////////////////////////////////////////////////////////////////////////////////// 	
++
++
++				    
++ 								  
++void SPI1_Init(void);			 //初始化SPI1口
++void SPI1_SetSpeed(u8 SpeedSet); //设置SPI1速度   
++u8 SPI1_ReadWriteByte(u8 TxData);//SPI1总线读写一个字节
++		 
++#endif
++
+diff --git a/stm32f407zg/uniproton/board/HARDWARE/W25QXX/w25qxx.c b/stm32f407zg/uniproton/board/HARDWARE/W25QXX/w25qxx.c
+new file mode 100755
+index 0000000..a6c6ff7
+--- /dev/null
++++ b/stm32f407zg/uniproton/board/HARDWARE/W25QXX/w25qxx.c
+@@ -0,0 +1,216 @@
++#include "w25qxx.h"
++#include "spi.h"
++#include "prt_task.h"
++#include "stm32f4xx_conf.h"
++
++u16 W25QXX_TYPE=W25Q128;
++
++void W25QXX_Init(void)
++{
++    GPIO_InitTypeDef  GPIO_InitStructure;
++
++    RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOB, ENABLE);
++    RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOG, ENABLE);
++    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_14;
++    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
++    GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
++    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;
++    GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;
++    GPIO_Init(GPIOB, &GPIO_InitStructure);
++
++    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_7;
++    GPIO_Init(GPIOG, &GPIO_InitStructure);
++
++    GPIO_SetBits(GPIOG,GPIO_Pin_7);
++    W25QXX_CS=1;
++    SPI1_Init();
++    SPI1_SetSpeed(SPI_BaudRatePrescaler_4);
++    W25QXX_TYPE=W25QXX_ReadID();
++}
++
++u8 W25QXX_ReadSR(void)
++{
++    u8 byte=0;
++    W25QXX_CS=0;
++    SPI1_ReadWriteByte(W25X_ReadStatusReg);
++    byte=SPI1_ReadWriteByte(0Xff);
++    W25QXX_CS=1;
++    return byte;
++}
++
++void W25QXX_Write_SR(u8 sr)
++{
++    W25QXX_CS=0;
++    SPI1_ReadWriteByte(W25X_WriteStatusReg);
++    SPI1_ReadWriteByte(sr);
++    W25QXX_CS=1;
++}
++
++void W25QXX_Write_Enable(void)
++{
++    W25QXX_CS=0;
++    SPI1_ReadWriteByte(W25X_WriteEnable);
++    W25QXX_CS=1;
++}
++
++void W25QXX_Write_Disable(void)
++{
++    W25QXX_CS=0;
++    SPI1_ReadWriteByte(W25X_WriteDisable);
++    W25QXX_CS=1;
++}
++
++u16 W25QXX_ReadID(void)
++{
++    u16 Temp = 0;
++    W25QXX_CS=0;
++    SPI1_ReadWriteByte(0x90);
++    SPI1_ReadWriteByte(0x00);
++    SPI1_ReadWriteByte(0x00);
++    SPI1_ReadWriteByte(0x00);
++    Temp|=SPI1_ReadWriteByte(0xFF)<<8;
++    Temp|=SPI1_ReadWriteByte(0xFF);
++    W25QXX_CS=1;
++    return Temp;
++}
++
++void W25QXX_Read(u8* pBuffer,u32 ReadAddr,u16 NumByteToRead)
++{
++    u16 i;
++    W25QXX_CS=0;
++    SPI1_ReadWriteByte(W25X_ReadData);
++    SPI1_ReadWriteByte((u8)((ReadAddr)>>16));
++    SPI1_ReadWriteByte((u8)((ReadAddr)>>8));
++    SPI1_ReadWriteByte((u8)ReadAddr);
++    for(i=0;i<NumByteToRead;i++)
++    {
++        pBuffer[i]=SPI1_ReadWriteByte(0XFF);
++    }
++    W25QXX_CS=1;
++}
++
++void W25QXX_Write_Page(u8* pBuffer,u32 WriteAddr,u16 NumByteToWrite)
++{
++    u16 i;
++    W25QXX_Write_Enable();
++    W25QXX_CS=0;
++    SPI1_ReadWriteByte(W25X_PageProgram);
++    SPI1_ReadWriteByte((u8)((WriteAddr)>>16));
++    SPI1_ReadWriteByte((u8)((WriteAddr)>>8));
++    SPI1_ReadWriteByte((u8)WriteAddr);
++    for(i=0;i<NumByteToWrite;i++)SPI1_ReadWriteByte(pBuffer[i]);
++    W25QXX_CS=1;
++    W25QXX_Wait_Busy();
++}
++
++void W25QXX_Write_NoCheck(u8* pBuffer,u32 WriteAddr,u16 NumByteToWrite)
++{
++    u16 pageremain;
++    pageremain=256-WriteAddr%256;
++    if(NumByteToWrite<=pageremain)pageremain=NumByteToWrite;
++    while(1)
++    {
++        W25QXX_Write_Page(pBuffer,WriteAddr,pageremain);
++        if(NumByteToWrite==pageremain)break;
++        else
++        {
++            pBuffer+=pageremain;
++            WriteAddr+=pageremain;
++
++            NumByteToWrite-=pageremain;
++            if(NumByteToWrite>256)pageremain=256;
++            else pageremain=NumByteToWrite;
++        }
++    };
++}
++
++u8 W25QXX_BUFFER[4096];
++void W25QXX_Write(u8* pBuffer,u32 WriteAddr,u16 NumByteToWrite)
++{
++    u32 secpos;
++    u16 secoff;
++    u16 secremain;
++    u16 i;
++    u8 * W25QXX_BUF;
++    W25QXX_BUF=W25QXX_BUFFER;
++    secpos=WriteAddr/4096;
++    secoff=WriteAddr%4096;
++    secremain=4096-secoff;
++
++    if(NumByteToWrite<=secremain)secremain=NumByteToWrite;
++    while(1)
++    {
++        W25QXX_Read(W25QXX_BUF,secpos*4096,4096);
++        for(i=0;i<secremain;i++)
++        {
++            if(W25QXX_BUF[secoff+i]!=0XFF)break;
++        }
++        if(i<secremain)
++        {
++            W25QXX_Erase_Sector(secpos);
++            for(i=0;i<secremain;i++)
++            {
++                W25QXX_BUF[i+secoff]=pBuffer[i];
++            }
++            W25QXX_Write_NoCheck(W25QXX_BUF,secpos*4096,4096);
++        } else W25QXX_Write_NoCheck(pBuffer,WriteAddr,secremain);
++        if(NumByteToWrite==secremain)break;
++        else
++        {
++            secpos++;
++            secoff=0;
++
++            pBuffer+=secremain;
++            WriteAddr+=secremain;
++            NumByteToWrite-=secremain;
++            if(NumByteToWrite>4096)secremain=4096;
++            else secremain=NumByteToWrite;
++        }
++    };
++}
++
++void W25QXX_Erase_Chip(void)
++{
++    W25QXX_Write_Enable();
++    W25QXX_Wait_Busy();
++    W25QXX_CS=0;
++    SPI1_ReadWriteByte(W25X_ChipErase);
++    W25QXX_CS=1;
++    W25QXX_Wait_Busy();
++}
++
++void W25QXX_Erase_Sector(u32 Dst_Addr)
++{
++    printf("fe:%x\r\n",Dst_Addr);
++    Dst_Addr*=4096;
++    W25QXX_Write_Enable();
++    W25QXX_Wait_Busy();
++    W25QXX_CS=0;
++    SPI1_ReadWriteByte(W25X_SectorErase);
++    SPI1_ReadWriteByte((u8)((Dst_Addr)>>16));
++    SPI1_ReadWriteByte((u8)((Dst_Addr)>>8));
++    SPI1_ReadWriteByte((u8)Dst_Addr);
++    W25QXX_CS=1;
++    W25QXX_Wait_Busy();
++}
++
++void W25QXX_Wait_Busy(void)
++{
++    while((W25QXX_ReadSR()&0x01)==0x01);
++}
++
++void W25QXX_PowerDown(void)
++{
++    W25QXX_CS=0;
++    SPI1_ReadWriteByte(W25X_PowerDown);
++    W25QXX_CS=1;
++    PRT_TaskDelay(3);
++}
++
++void W25QXX_WAKEUP(void)
++{
++    W25QXX_CS=0;
++    SPI1_ReadWriteByte(W25X_ReleasePowerDown);
++    W25QXX_CS=1;
++    PRT_TaskDelay(3);
++}
+diff --git a/stm32f407zg/uniproton/board/HARDWARE/W25QXX/w25qxx.h b/stm32f407zg/uniproton/board/HARDWARE/W25QXX/w25qxx.h
+new file mode 100755
+index 0000000..ede24cf
+--- /dev/null
++++ b/stm32f407zg/uniproton/board/HARDWARE/W25QXX/w25qxx.h
+@@ -0,0 +1,89 @@
++#ifndef __W25QXX_H
++#define __W25QXX_H			    
++#include "sys.h"  
++//////////////////////////////////////////////////////////////////////////////////	 
++//本程序只供学习使用，未经作者许可，不得用于其它任何用途
++//ALIENTEK STM32F407开发板
++//W25QXX 驱动代码	   
++//正点原子@ALIENTEK
++//技术论坛:www.openedv.com
++//创建日期:2014/5/6
++//版本：V1.0
++//版权所有，盗版必究。
++//Copyright(C) 广州市星翼电子科技有限公司 2014-2024
++//All rights reserved									  
++////////////////////////////////////////////////////////////////////////////////// 
++
++//W25X系列/Q系列芯片列表	   
++//W25Q80  ID  0XEF13
++//W25Q16  ID  0XEF14
++//W25Q32  ID  0XEF15
++//W25Q64  ID  0XEF16	
++//W25Q128 ID  0XEF17	
++#define W25Q80 	0XEF13 	
++#define W25Q16 	0XEF14
++#define W25Q32 	0XEF15
++#define W25Q64 	0XEF16
++#define W25Q128	0XEF17
++
++#define NM25Q80 	0X5213
++#define NM25Q16 	0X5214
++#define NM25Q32 	0X5215
++#define NM25Q64 	0X5216
++#define NM25Q128	0X5217
++#define NM25Q256 	0X5218
++
++extern u16 W25QXX_TYPE;					//定义W25QXX芯片型号		   
++
++#define	W25QXX_CS 		PBout(14)  		//W25QXX的片选信号
++
++////////////////////////////////////////////////////////////////////////////////// 
++//指令表
++#define W25X_WriteEnable		0x06 
++#define W25X_WriteDisable		0x04 
++#define W25X_ReadStatusReg		0x05 
++#define W25X_WriteStatusReg		0x01 
++#define W25X_ReadData			0x03 
++#define W25X_FastReadData		0x0B 
++#define W25X_FastReadDual		0x3B 
++#define W25X_PageProgram		0x02 
++#define W25X_BlockErase			0xD8 
++#define W25X_SectorErase		0x20 
++#define W25X_ChipErase			0xC7 
++#define W25X_PowerDown			0xB9 
++#define W25X_ReleasePowerDown	0xAB 
++#define W25X_DeviceID			0xAB 
++#define W25X_ManufactDeviceID	0x90 
++#define W25X_JedecDeviceID		0x9F 
++
++void W25QXX_Init(void);
++u16  W25QXX_ReadID(void);  	    		//读取FLASH ID
++u8	 W25QXX_ReadSR(void);        		//读取状态寄存器 
++void W25QXX_Write_SR(u8 sr);  			//写状态寄存器
++void W25QXX_Write_Enable(void);  		//写使能 
++void W25QXX_Write_Disable(void);		//写保护
++void W25QXX_Write_NoCheck(u8* pBuffer,u32 WriteAddr,u16 NumByteToWrite);
++void W25QXX_Read(u8* pBuffer,u32 ReadAddr,u16 NumByteToRead);   //读取flash
++void W25QXX_Write(u8* pBuffer,u32 WriteAddr,u16 NumByteToWrite);//写入flash
++void W25QXX_Erase_Chip(void);    	  	//整片擦除
++void W25QXX_Erase_Sector(u32 Dst_Addr);	//扇区擦除
++void W25QXX_Wait_Busy(void);           	//等待空闲
++void W25QXX_PowerDown(void);        	//进入掉电模式
++void W25QXX_WAKEUP(void);				//唤醒
++#endif
++
++
++
++
++
++
++
++
++
++
++
++
++
++
++
 +
 diff --git a/stm32f407zg/uniproton/board/LWIP/lwip_comm.c b/stm32f407zg/uniproton/board/LWIP/lwip_comm.c
 new file mode 100644
