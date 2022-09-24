@@ -1,16 +1,20 @@
-From 5b5f57ef41c4d17f76e1fe596a8ae1aca23db610 Mon Sep 17 00:00:00 2001
-From: wangchen <253227059@qq.com>
-Date: Fri, 9 Sep 2022 09:31:47 +0000
-Subject: [PATCH] Signed-off-by: wangchen <253227059@qq.com> Change-Id:
- I6aaf0fb47e46f704916d30662baf8453b7815449
+From 54da22b9776492d3c1a2500f1914b5dadc6898b2 Mon Sep 17 00:00:00 2001
+From: zhushengle <zhushengle@huawei.com>
+Date: Thu, 22 Sep 2022 11:38:29 +0800
+Subject: [PATCH] =?UTF-8?q?feat:=20=E6=94=AF=E6=8C=81uniproton=E5=86=85?=
+ =?UTF-8?q?=E6=A0=B8?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
+Signed-off-by: zhushengle <zhushengle@huawei.com>
+Change-Id: Ia56aa713233607e9cf746e3e4d7fe3691c65d88d
 ---
  stm32f407zg/BUILD.gn                          |   30 +
- stm32f407zg/ohos.build                        |   10 +
- stm32f407zg/uniproton/BUILD.gn                |   35 +
+ stm32f407zg/uniproton/BUILD.gn                |   38 +
  stm32f407zg/uniproton/board/ARCH/ethernetif.c |  132 +
  stm32f407zg/uniproton/board/ARCH/ethernetif.h |   18 +
- stm32f407zg/uniproton/board/BUILD.gn          |  128 +
+ stm32f407zg/uniproton/board/BUILD.gn          |  132 +
  stm32f407zg/uniproton/board/CORE/core_cm4.h   | 1772 ++++
  .../uniproton/board/CORE/core_cm4_simd.h      |  673 ++
  .../uniproton/board/CORE/core_cmFunc.h        |  636 ++
@@ -97,20 +101,28 @@ Subject: [PATCH] Signed-off-by: wangchen <253227059@qq.com> Change-Id:
  stm32f407zg/uniproton/board/SYSTEM/sys/sys.h  |   98 +
  .../uniproton/board/SYSTEM/usart/usart.c      |  161 +
  .../uniproton/board/SYSTEM/usart/usart.h      |   38 +
- stm32f407zg/uniproton/board/USER/board.c      |  226 +
- stm32f407zg/uniproton/board/USER/dprintf.c    |   61 +
- stm32f407zg/uniproton/board/USER/stm32f4xx.h  | 9177 +++++++++++++++++
+ stm32f407zg/uniproton/board/USER/board.c      |  266 +
+ stm32f407zg/uniproton/board/USER/dprintf.c    |   78 +
+ stm32f407zg/uniproton/board/USER/stm32f4xx.h  | 9175 +++++++++++++++++
  .../uniproton/board/USER/stm32f4xx_conf.h     |  125 +
  .../uniproton/board/USER/stm32f4xx_it.c       |  168 +
  .../uniproton/board/USER/stm32f4xx_it.h       |   60 +
  .../uniproton/board/USER/system_stm32f4xx.c   | 1130 ++
  .../uniproton/board/USER/system_stm32f4xx.h   |  105 +
- stm32f407zg/uniproton/board/rtos.ld           |  117 +
- stm32f407zg/uniproton/board/target_config.h   |  107 +
- stm32f407zg/uniproton/config.gni              |   96 +
- 103 files changed, 70516 insertions(+)
+ stm32f407zg/uniproton/board/fs/fs_porting.c   |  203 +
+ stm32f407zg/uniproton/board/rtos.ld           |  201 +
+ stm32f407zg/uniproton/board/target_config.h   |  108 +
+ stm32f407zg/uniproton/config.gni              |  115 +
+ stm32f407zg/uniproton/hals/cmsis/BUILD.gn     |   46 +
+ stm32f407zg/uniproton/hals/cmsis/cmsis_os.h   |   36 +
+ stm32f407zg/uniproton/hals/cmsis/cmsis_os2.h  |   31 +
+ .../uniproton/hals/cmsis/cmsis_uniproton.c    |  365 +
+ .../uniproton/hals/cmsis/hos_cmsis_adp.h      |   43 +
+ stm32f407zg/uniproton/hals/hal_trace.h        |   36 +
+ .../uniproton/hals/utils/file/BUILD.gn        |   41 +
+ .../uniproton/hals/utils/file/src/hal_file.c  |  155 +
+ 111 files changed, 71628 insertions(+)
  create mode 100644 stm32f407zg/BUILD.gn
- create mode 100644 stm32f407zg/ohos.build
  create mode 100644 stm32f407zg/uniproton/BUILD.gn
  create mode 100644 stm32f407zg/uniproton/board/ARCH/ethernetif.c
  create mode 100644 stm32f407zg/uniproton/board/ARCH/ethernetif.h
@@ -209,9 +221,18 @@ Subject: [PATCH] Signed-off-by: wangchen <253227059@qq.com> Change-Id:
  create mode 100644 stm32f407zg/uniproton/board/USER/stm32f4xx_it.h
  create mode 100644 stm32f407zg/uniproton/board/USER/system_stm32f4xx.c
  create mode 100644 stm32f407zg/uniproton/board/USER/system_stm32f4xx.h
+ create mode 100644 stm32f407zg/uniproton/board/fs/fs_porting.c
  create mode 100644 stm32f407zg/uniproton/board/rtos.ld
  create mode 100644 stm32f407zg/uniproton/board/target_config.h
  create mode 100644 stm32f407zg/uniproton/config.gni
+ create mode 100644 stm32f407zg/uniproton/hals/cmsis/BUILD.gn
+ create mode 100644 stm32f407zg/uniproton/hals/cmsis/cmsis_os.h
+ create mode 100644 stm32f407zg/uniproton/hals/cmsis/cmsis_os2.h
+ create mode 100644 stm32f407zg/uniproton/hals/cmsis/cmsis_uniproton.c
+ create mode 100644 stm32f407zg/uniproton/hals/cmsis/hos_cmsis_adp.h
+ create mode 100644 stm32f407zg/uniproton/hals/hal_trace.h
+ create mode 100644 stm32f407zg/uniproton/hals/utils/file/BUILD.gn
+ create mode 100644 stm32f407zg/uniproton/hals/utils/file/src/hal_file.c
 
 diff --git a/stm32f407zg/BUILD.gn b/stm32f407zg/BUILD.gn
 new file mode 100644
@@ -249,29 +270,12 @@ index 0000000..f185908
 +
 +group("stm32f407zg") {
 +}
-diff --git a/stm32f407zg/ohos.build b/stm32f407zg/ohos.build
-new file mode 100644
-index 0000000..34f14d8
---- /dev/null
-+++ b/stm32f407zg/ohos.build
-@@ -0,0 +1,10 @@
-+{
-+  "parts": {
-+    "device_stm32f407zg": {
-+      "module_list": [
-+        "//device/soc/st/stm32f407zg:stm32f407zg"
-+      ]
-+    }
-+  },
-+  "subsystem": "device_stm32f407zg"
-+}
-\ No newline at end of file
 diff --git a/stm32f407zg/uniproton/BUILD.gn b/stm32f407zg/uniproton/BUILD.gn
 new file mode 100644
-index 0000000..2a669cc
+index 0000000..41624b4
 --- /dev/null
 +++ b/stm32f407zg/uniproton/BUILD.gn
-@@ -0,0 +1,35 @@
+@@ -0,0 +1,38 @@
 +# Copyright (c) 2022 Huawei Device Co., Ltd. All rights reserved.
 +#
 +# Redistribution and use in source and binary forms, with or without modification,
@@ -301,7 +305,10 @@ index 0000000..2a669cc
 +# ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 +
 +group("device") {
-+  deps = [ "board:bsp_config" ]
++  deps = [
++    "board:bsp_config",
++    "hals/cmsis:cmsis",
++  ]
 +}
 +
 +config("public") {
@@ -471,10 +478,10 @@ index 0000000..71b2847
 +#endif
 diff --git a/stm32f407zg/uniproton/board/BUILD.gn b/stm32f407zg/uniproton/board/BUILD.gn
 new file mode 100644
-index 0000000..0d6c1b5
+index 0000000..0ffb87b
 --- /dev/null
 +++ b/stm32f407zg/uniproton/board/BUILD.gn
-@@ -0,0 +1,128 @@
+@@ -0,0 +1,132 @@
 +# Copyright (c) 2022-2022 Huawei Device Co., Ltd. All rights reserved.
 +#
 +# Redistribution and use in source and binary forms, with or without modification,
@@ -503,12 +510,10 @@ index 0000000..0d6c1b5
 +# OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
 +# ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 +
-+import("//kernel/uniproton/components/net/lwip-2.1/lwip_porting.gni")
-+# import("//kernel/uniproton/components/net/test/lwip_test.gni")
++import("//kernel/uniproton/uniproton.gni")
 +
 +static_library("bsp_config") {
 +  asmflags = board_asmflags
-+  
 +  sources = [
 +    "ARCH/ethernetif.c",
 +    "FWLIB/STM32F4x7_ETH_Driver/src/stm32f4x7_eth.c",
@@ -528,7 +533,6 @@ index 0000000..0d6c1b5
 +    "FWLIB/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_exti.c",
 +    "FWLIB/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_flash.c",
 +    "FWLIB/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_flash_ramfunc.c",
-+    "FWLIB/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_fmc.c",
 +    "FWLIB/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_fsmc.c",
 +    "FWLIB/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_gpio.c",
 +    "FWLIB/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_hash.c",
@@ -558,8 +562,9 @@ index 0000000..0d6c1b5
 +    "USER/system_stm32f4xx.c",
 +    "HARDWARE/SPI/spi.c",
 +    "HARDWARE/W25QXX/w25qxx.c",
++    "fs/fs_porting.c",
 +  ]
-+  
++
 +  include_dirs = [
 +    "ARCH",
 +    "CORE",
@@ -573,6 +578,8 @@ index 0000000..0d6c1b5
 +    "HARDWARE/SPI",
 +    "HARDWARE/W25QXX",
 +  ]
++
++  include_dirs += KERNEL_FS_INCLUDE_DIRS
 +}
 +
 +config("public") {
@@ -581,22 +588,26 @@ index 0000000..0d6c1b5
 +    "//third_party/cmsis/CMSIS/Core/Include",
 +  ]
 +
-+  include_dirs += LWIP_PORTING_INCLUDE_DIRS + [ # LWIP_TEST_INCLUDE_DIRS
++  include_dirs += KERNEL_LWIP_INCLUDE_DIRS + [
 +    "//third_party/lwip/src/include",
 +    "//third_party/cmsis/CMSIS/RTOS2/Include",
 +    "//third_party/musl/porting/uniproton/include",
-+    "//third_party/musl/include",  
++    "//third_party/musl/include",
 +  ]
-+  
++
 +  ldflags = [
-+    "-nostartfiles",
 +    "-Wl,-T" + rebase_path("rtos.ld"),
-+    "-nostdlib",
-+    "-static",
-+    "-N",
-+    "-Wl,--gc-sections",
-+    "-Wl,-Map=OHOS_Image.map",
++    "-Wl,-Llibs",
 +  ]
++
++  product_cfg = read_file("${product_config_path}/config.json", "json")
++  foreach(product_config, product_cfg.bin_list) {
++    ldflags += [ "-Wl,--whole-archive" ]
++    foreach(force_link_lib, product_config.force_link_libs) {
++      ldflags += [ "-l${force_link_lib}" ]
++    }
++    ldflags += [ "-Wl,--no-whole-archive" ]
++  }
 +
 +  libs = [
 +    "nosys",
@@ -59913,10 +59924,10 @@ index 0000000..da14508
 +
 diff --git a/stm32f407zg/uniproton/board/USER/board.c b/stm32f407zg/uniproton/board/USER/board.c
 new file mode 100644
-index 0000000..94abae3
+index 0000000..3c8eb9b
 --- /dev/null
 +++ b/stm32f407zg/uniproton/board/USER/board.c
-@@ -0,0 +1,226 @@
+@@ -0,0 +1,266 @@
 +/*
 + * Copyright (c) 2022 Huawei Device Co., Ltd.
 + *
@@ -59949,7 +59960,7 @@ index 0000000..94abae3
 +
 +#include "prt_task.h"
 +#include "prt_config.h"
-+#include "prt_lib_external.h"
++//#include "prt_lib_external.h"
 +#include "lwip/netif.h"
 +#include "lwip_comm.h"
 +#include "securec.h"
@@ -59976,6 +59987,7 @@ index 0000000..94abae3
 +    return OS_OK;
 +}
 +
++extern void SystemInit(void);
 +extern unsigned long g_data_start;
 +extern unsigned long g_data_end;
 +extern unsigned long data_load_start;
@@ -59983,6 +59995,8 @@ index 0000000..94abae3
 +{
 +    int size = (unsigned long)&g_data_end - (unsigned long)&g_data_start;
 +    (void)memcpy_s((void *)&g_data_start, size, (void *)&data_load_start, size);
++
++    SystemInit();
 +}
 +
 +static void udpTestTask(void)
@@ -60071,6 +60085,41 @@ index 0000000..94abae3
 +	lwip_close(serv_sock);
 +}
 +
++static char *GetTaskStatusToStr(TskStatus status)
++{
++    if (status & OS_TSK_RUNNING) {
++        return (char *)"Running";
++    } else if (status & OS_TSK_SUSPEND) {
++        return (char *)"Suspend";
++    } else if (status & OS_TSK_PEND) {
++        return (char *)"SemPend";
++    } else if (status & OS_TSK_QUEUE_PEND) {
++        return (char *)"QuePend";
++    } else if (status & OS_TSK_EVENT_PEND) {
++        return (char *)"EventPend";
++    } else if (status & OS_TSK_DELAY) {
++        return (char *)"Delay";
++    } else if (status & OS_TSK_READY) {
++        return (char *)"Ready";
++    }
++    return (char *)"Invalid";
++}
++
++void ShowTaskInfo(void)
++{
++    struct TskInfo taskInfo;
++    printf(" TID Prio    Status               Name\n");
++    for (U32 id = 0; id < OS_TSK_MAX_SUPPORT_NUM; id++) {
++        memset_s(&taskInfo, sizeof(struct TskInfo), 0, sizeof(struct TskInfo));
++        U32 ret = PRT_TaskGetInfo(id, &taskInfo);
++        if (ret != OS_OK) {
++            continue;
++        }
++
++        printf("%4u%5u%10s%20s\n", id, taskInfo.taskPrio, GetTaskStatusToStr(taskInfo.taskStatus), taskInfo.name);
++    }
++}
++
 +static void OsTskUser(void)
 +{
 +	int ret;
@@ -60089,7 +60138,6 @@ index 0000000..94abae3
 +     * tcp操作同udp，主机选择tcp client
 +     */
 +    tcpTestTask();
-+    
 +    /*
 +     * 不测试tcp、udp时，系统循环输出日志
 +     */
@@ -60100,29 +60148,23 @@ index 0000000..94abae3
 +    //             (((lwip_netif.ip_addr.addr)&0x0000ff00)>>8),  \
 +    //             (((lwip_netif.ip_addr.addr)&0x00ff0000)>>16), \
 +    //             ((lwip_netif.ip_addr.addr)&0xff000000)>>24);
-+    //     PRT_TaskDelay(500);
-+	// }
++    //    PRT_TaskDelay(1000);
++    // }
 +}
 +
-+U32 PRT_AppInit(void)
-+{   
++void TestTask(void)
++{
++    printf("TestTask!!!\n");
 +    U32 ret;
 +    TskHandle taskId;
-+    struct TskInitParam taskParam;
-+    
++    struct TskInitParam taskParam = {0};
 +    taskParam.taskEntry = (TskEntryFunc)OsTskUser;
 +    taskParam.stackSize = 0x800;
-+    taskParam.name = "uniUserTask";
-+    taskParam.taskPrio = OS_TSK_PRIORITY_03;
++    taskParam.name = "UserTask";
++    taskParam.taskPrio = OS_TSK_PRIORITY_20;
 +    taskParam.stackAddr = 0;
 +
 +    ret = PRT_TaskCreate(&taskId, &taskParam);
-+	printf("    PRT_AppInit:\n\r");
-+    printf("        uniUserTask taskId = %d\n\r", taskId);
-+	printf("        uniUserTask name = %s\n\r", taskParam.name);
-+	printf("        uniUserTask taskPrio = %d\n\r", taskParam.taskPrio);
-+	printf("        uniUserTask taskEntry = %p\n\r", taskParam.taskEntry);
-+	
 +    if (ret != OS_OK) {
 +        return ret;
 +    }
@@ -60131,10 +60173,19 @@ index 0000000..94abae3
 +    if (ret != OS_OK) {
 +        return ret;
 +    }
++}
 +
-+    // 初始化lwip
++extern S32 LfsLowLevelInit(void);
++extern void OHOS_SystemInit(void);
++U32 PRT_AppInit(void)
++{
++    printf("PRT_AppInit!\n");
++
++    FsInit();
++
 +    lwip_comm_init();
 +
++    OHOS_SystemInit();
 +    return OS_OK;
 +}
 +
@@ -60145,10 +60196,10 @@ index 0000000..94abae3
 +#endif /* __cpluscplus */
 diff --git a/stm32f407zg/uniproton/board/USER/dprintf.c b/stm32f407zg/uniproton/board/USER/dprintf.c
 new file mode 100644
-index 0000000..96289a1
+index 0000000..5906385
 --- /dev/null
 +++ b/stm32f407zg/uniproton/board/USER/dprintf.c
-@@ -0,0 +1,61 @@
+@@ -0,0 +1,78 @@
 +/*
 + * Copyright (c) 2022 Huawei Device Co., Ltd.
 + *
@@ -60210,12 +60261,29 @@ index 0000000..96289a1
 +    }
 +    return len;
 +}
++
++const char * const FUN_ARG_S = "0123456I";
++void HiLogPrintf(U8 module, U8 level, const char *nums, const char *fmt, ...)
++{
++#define BUFSIZE  256
++    char buf[BUFSIZE] = { 0 };
++    va_list ap;
++    va_start(ap, fmt);
++    int len = vsnprintf_s(buf, sizeof(buf), BUFSIZE - 1, fmt, ap);
++    va_end(ap);
++    if (len > 0) {
++        dputs(buf, fputc, 0);
++    } else {
++        dputs("printf error!\n", fputc, 0);
++    }
++    return;
++}
 diff --git a/stm32f407zg/uniproton/board/USER/stm32f4xx.h b/stm32f407zg/uniproton/board/USER/stm32f4xx.h
 new file mode 100644
-index 0000000..a4a9973
+index 0000000..a13a4ac
 --- /dev/null
 +++ b/stm32f407zg/uniproton/board/USER/stm32f4xx.h
-@@ -0,0 +1,9177 @@
+@@ -0,0 +1,9175 @@
 +/**
 +  ******************************************************************************
 +  * @file    stm32f4xx.h
@@ -60303,13 +60371,11 @@ index 0000000..a4a9973
 +#endif
 +
 +/* Old STM32F40XX definition, maintained for legacy purpose */
-+#define STM32F40XX
 +#ifdef STM32F40XX
 +  #define STM32F40_41xxx
 +#endif /* STM32F40XX */
 +
 +/* Old STM32F427X definition, maintained for legacy purpose */
-+#define STM32F427X
 +#ifdef STM32F427X
 +  #define STM32F427_437xx
 +#endif /* STM32F427X */
@@ -71011,12 +71077,221 @@ index 0000000..5fc2bbc
 +  * @}
 +  */  
 +/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
+diff --git a/stm32f407zg/uniproton/board/fs/fs_porting.c b/stm32f407zg/uniproton/board/fs/fs_porting.c
+new file mode 100644
+index 0000000..29c4dbe
+--- /dev/null
++++ b/stm32f407zg/uniproton/board/fs/fs_porting.c
+@@ -0,0 +1,203 @@
++/*
++ * Copyright (c) 2022-2022 Huawei Device Co., Ltd. All rights reserved.
++ *
++ * Redistribution and use in source and binary forms, with or without modification,
++ * are permitted provided that the following conditions are met:
++ *
++ * 1. Redistributions of source code must retain the above copyright notice, this list of
++ *    conditions and the following disclaimer.
++ *
++ * 2. Redistributions in binary form must reproduce the above copyright notice, this list
++ *    of conditions and the following disclaimer in the documentation and/or other materials
++ *    provided with the distribution.
++ *
++ * 3. Neither the name of the copyright holder nor the names of its contributors may be used
++ *    to endorse or promote products derived from this software without specific prior written
++ *    permission.
++ *
++ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
++ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
++ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
++ * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
++ * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
++ * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
++ * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
++ * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
++ * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
++ * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
++ * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
++ */
++
++#include "prt_fs.h"
++#include "prt_sem.h"
++
++struct fs_cfg {
++    char *mount_point;
++    struct PartitionCfg partCfg;
++};
++
++U32 PRT_CurTaskIDGet()
++{
++    return 0;
++}
++
++int pthread_mutex_lock(pthread_mutex_t *mutex)
++{
++    return 0;
++}
++
++int pthread_mutex_unlock(pthread_mutex_t *mutex)
++{
++    return 0;
++}
++
++#define FLASH_PARTITION_DATA0       0
++
++typedef struct {
++    const char *partitionDescription;
++    U32 partitionStartAddr;
++    U32 partitionLength;
++    U32 partitionOptions;
++} HalLogicPartition;
++
++HalLogicPartition g_halPartitions[] = {
++    [FLASH_PARTITION_DATA0] = {
++        .partitionDescription = "littlefs",
++        .partitionStartAddr = 0,
++        .partitionLength = 0x800000, // size is 8M
++    },
++};
++
++#define FLASH_SECTOR_SIZE   512
++
++S32 virt_flash_erase(int pdrv, U32 offSet, U32 size)
++{
++    U32 startAddr = offSet;
++    U32 partitionEnd;
++
++    partitionEnd = g_halPartitions[pdrv].partitionStartAddr + g_halPartitions[pdrv].partitionLength;
++    if (startAddr >= partitionEnd) {
++        printf("flash over erase, 0x%x, 0x%x\r\n", startAddr, partitionEnd);
++        printf("flash over write\r\n");
++        return -1;
++    }
++    if ((startAddr + size) > partitionEnd) {
++        printf("flash over write, new len is %d\r\n", size);
++        return -1;
++    }
++
++    int count = size/FLASH_SECTOR_SIZE;
++    int i;
++    U32 p = offSet;
++
++    for (i = 0; i < count; i++) {
++        W25QXX_Erase_Sector(p);
++        p += FLASH_SECTOR_SIZE;
++    }
++
++    return 0;
++}
++
++S32 virt_flash_write(int pdrv, U32 offSet, const void *buf, U32 bufLen)
++{
++    U32 startAddr = offSet;
++    U32 partitionEnd;
++
++    partitionEnd = g_halPartitions[pdrv].partitionStartAddr + g_halPartitions[pdrv].partitionLength;
++    if (startAddr >= partitionEnd) {
++        printf("flash over write, 0x%x, 0x%x\r\n", startAddr, partitionEnd);
++        return -1;
++    }
++    if ((startAddr + bufLen) > partitionEnd) {
++        printf("flash over write, new len is %d\r\n", bufLen);
++        return -1;
++    }
++
++    W25QXX_Write(buf, startAddr, bufLen);
++
++    return 0;
++}
++
++S32 virt_flash_read(int pdrv, U32 offSet, void *buf, U32 bufLen)
++{
++    U32 startAddr = offSet;
++    U32 partitionEnd;
++
++    partitionEnd = g_halPartitions[pdrv].partitionStartAddr + g_halPartitions[pdrv].partitionLength;
++    if (startAddr >= partitionEnd) {
++        printf("flash over read, 0x%x, 0x%x\r\n", startAddr, partitionEnd);
++        return -1;
++    }
++    if ((startAddr + bufLen) > partitionEnd) {
++        printf("flash over read, new len is %d\r\n", bufLen);
++        return -1;
++    }
++
++    W25QXX_Read(buf, startAddr, bufLen);
++    return 0;
++}
++
++static S32 LfsLowLevelInit(void)
++{
++    S32 ret;
++    struct fs_cfg fs[OS_LFS_MAX_MOUNT_SIZE] = {0};
++
++    S32 lengthArray = g_halPartitions[FLASH_PARTITION_DATA0].partitionLength;
++    S32 addrArray = g_halPartitions[FLASH_PARTITION_DATA0].partitionStartAddr;
++    ret = PRT_DiskPartition("flash0", "littlefs", &lengthArray, &addrArray, 1);
++    printf("%s: DiskPartition %s\n", __func__, (ret == 0) ? "succeed" : "failed");
++    if (ret != 0) {
++        return -1;
++    }
++
++    fs[0].mount_point = "/data";
++    fs[0].partCfg.partNo = FLASH_PARTITION_DATA0;
++    fs[0].partCfg.blockSize = 4096; /* 4096, lfs block size */
++    fs[0].partCfg.blockCount = 2048; /* 2048, lfs block count */
++    fs[0].partCfg.readFunc = virt_flash_read;
++    fs[0].partCfg.writeFunc = virt_flash_write;
++    fs[0].partCfg.eraseFunc = virt_flash_erase;
++
++    fs[0].partCfg.readSize = 256; /* 256, lfs read size */
++    fs[0].partCfg.writeSize = 256; /* 256, lfs prog size */
++    fs[0].partCfg.cacheSize = 256; /* 256, lfs cache size */
++    fs[0].partCfg.lookaheadSize = 16; /* 16, lfs lookahead size */
++    fs[0].partCfg.blockCycles = 1000; /* 1000, lfs block cycles */
++
++    ret = PRT_PartitionFormat("flash0", "littlefs", &fs[0].partCfg);
++    printf("%s: PartitionFormat %s\n", __func__, (ret == 0) ? "succeed" : "failed");
++    if (ret != 0) {
++        return -1;
++    }
++
++    ret = mount(NULL, fs[0].mount_point, "littlefs", 0, &fs[0].partCfg);
++    printf("%s: mount fs on '%s' %s\n", __func__, fs[0].mount_point, (ret == 0) ? "succeed" : "failed");
++    if (ret != 0) {
++        return -1;
++    }
++
++    ret = mkdir(fs[0].mount_point, 0777); /* 0777, set dir permissions */
++    printf("%s: mkdir '%s' %s\n", __func__, fs[0].mount_point, (ret == 0) ? "succeed" : "failed");
++    if (ret != 0) {
++        return -1;
++    }
++
++#if (defined(OSCFG_TEST)) 
++    LfsTest();
++#endif
++    return 0;
++}
++
++int FsInit(void)
++{
++    W25QXX_Init();
++
++    S32 ret = PRT_VfsInit();
++    if (ret < 0) {
++        printf("VfsInit failed!\n");
++        return ret;
++    }
++
++    return LfsLowLevelInit();
++}
++
 diff --git a/stm32f407zg/uniproton/board/rtos.ld b/stm32f407zg/uniproton/board/rtos.ld
 new file mode 100644
-index 0000000..aafab52
+index 0000000..cb87886
 --- /dev/null
 +++ b/stm32f407zg/uniproton/board/rtos.ld
-@@ -0,0 +1,117 @@
+@@ -0,0 +1,201 @@
 +/*
 +*****************************************************************************
 +**
@@ -71089,7 +71364,91 @@ index 0000000..aafab52
 +        *(.rodata .rodata.* .gnu.linkonce.r.*)
 +        *(.rodata1)
 +    } > flash
-+ 
++
++    .zInit (.) : {
++        . = ALIGN(4);
++        __zinitcall_bsp_start = .;
++        KEEP (*(.zinitcall.bsp0.init))
++        KEEP (*(.zinitcall.bsp1.init))
++        KEEP (*(.zinitcall.bsp2.init))
++        KEEP (*(.zinitcall.bsp3.init))
++        KEEP (*(.zinitcall.bsp4.init))
++        __zinitcall_bsp_end = .;
++        . = ALIGN(4);
++        __zinitcall_device_start = .;
++        KEEP (*(.zinitcall.device0.init))
++        KEEP (*(.zinitcall.device1.init))
++        KEEP (*(.zinitcall.device2.init))
++        KEEP (*(.zinitcall.device3.init))
++        KEEP (*(.zinitcall.device4.init))
++        __zinitcall_device_end = .;
++        . = ALIGN(4);
++        __zinitcall_core_start = .;
++        KEEP (*(.zinitcall.core0.init))
++        KEEP (*(.zinitcall.core1.init))
++        KEEP (*(.zinitcall.core2.init))
++        KEEP (*(.zinitcall.core3.init))
++        KEEP (*(.zinitcall.core4.init))
++        __zinitcall_core_end = .;
++        . = ALIGN(4);
++        __zinitcall_sys_service_start = .;
++        KEEP (*(.zinitcall.sys.service0.init))
++        KEEP (*(.zinitcall.sys.service1.init))
++        KEEP (*(.zinitcall.sys.service2.init))
++        KEEP (*(.zinitcall.sys.service3.init))
++        KEEP (*(.zinitcall.sys.service4.init))
++        __zinitcall_sys_service_end = .;
++        . = ALIGN(4);
++        __zinitcall_sys_feature_start = .;
++        KEEP (*(.zinitcall.sys.feature0.init))
++        KEEP (*(.zinitcall.sys.feature1.init))
++        KEEP (*(.zinitcall.sys.feature2.init))
++        KEEP (*(.zinitcall.sys.feature3.init))
++        KEEP (*(.zinitcall.sys.feature4.init))
++        __zinitcall_sys_feature_end = .;
++        . = ALIGN(4);
++        __zinitcall_run_start = .;
++        KEEP (*(.zinitcall.run0.init))
++        KEEP (*(.zinitcall.run1.init))
++        KEEP (*(.zinitcall.run2.init))
++        KEEP (*(.zinitcall.run3.init))
++        KEEP (*(.zinitcall.run4.init))
++        __zinitcall_run_end = .;
++        . = ALIGN(4);
++        __zinitcall_app_service_start = .;
++        KEEP (*(.zinitcall.app.service0.init))
++        KEEP (*(.zinitcall.app.service1.init))
++        KEEP (*(.zinitcall.app.service2.init))
++        KEEP (*(.zinitcall.app.service3.init))
++        KEEP (*(.zinitcall.app.service4.init))
++        __zinitcall_app_service_end = .;
++        . = ALIGN(4);
++        __zinitcall_app_feature_start = .;
++        KEEP (*(.zinitcall.app.feature0.init))
++        KEEP (*(.zinitcall.app.feature1.init))
++        KEEP (*(.zinitcall.app.feature2.init))
++        KEEP (*(.zinitcall.app.feature3.init))
++        KEEP (*(.zinitcall.app.feature4.init))
++        __zinitcall_app_feature_end = .;
++        . = ALIGN(4);
++        __zinitcall_test_start = .;
++        KEEP (*(.zinitcall.test0.init))
++        KEEP (*(.zinitcall.test1.init))
++        KEEP (*(.zinitcall.test2.init))
++        KEEP (*(.zinitcall.test3.init))
++        KEEP (*(.zinitcall.test4.init))
++        __zinitcall_test_end = .;
++        . = ALIGN(4);
++        __zinitcall_exit_start = .;
++        KEEP (*(.zinitcall.exit0.init))
++        KEEP (*(.zinitcall.exit1.init))
++        KEEP (*(.zinitcall.exit2.init))
++        KEEP (*(.zinitcall.exit3.init))
++        KEEP (*(.zinitcall.exit4.init))
++        __zinitcall_exit_end = .;
++        . = ALIGN(4);
++    } > flash
++
 +    .data : {
 +        __data_start = . ;
 +        g_data_start = . ;
@@ -71134,13 +71493,12 @@ index 0000000..aafab52
 +    end = .;
 +    /DISCARD/ : { *(.note.GNU-stack) *(.gnu_debuglink) *(.gnu.lto_*) }
 +}
-\ No newline at end of file
 diff --git a/stm32f407zg/uniproton/board/target_config.h b/stm32f407zg/uniproton/board/target_config.h
 new file mode 100644
-index 0000000..41c15ad
+index 0000000..8ab59af
 --- /dev/null
 +++ b/stm32f407zg/uniproton/board/target_config.h
-@@ -0,0 +1,107 @@
+@@ -0,0 +1,108 @@
 +/*
 + * Copyright (c) 2009-2022 Huawei Technologies Co., Ltd. All rights reserved.
 + *
@@ -71168,7 +71526,8 @@ index 0000000..41c15ad
 +
 +/* ***************************** 配置系统基本信息 ******************************* */
 +/* 芯片主频 */
-+#define OS_SYS_CLOCK                                    168000000
++extern unsigned SystemCoreClock;
++#define OS_SYS_CLOCK                                    SystemCoreClock
 +
 +/* ***************************** 中断模块配置 ************************** */
 +/* 硬中断最大支持个数 */
@@ -71178,7 +71537,7 @@ index 0000000..41c15ad
 +/* Tick中断模块裁剪开关 */
 +#define OS_INCLUDE_TICK                                 YES
 +/* Tick中断时间间隔，tick处理时间不能超过1/OS_TICK_PER_SECOND(s) */
-+#define OS_TICK_PER_SECOND                              10000
++#define OS_TICK_PER_SECOND                              1000
 +
 +/* ***************************** 配置定时器模块 ***************************** */
 +/* 基于TICK的软件定时器裁剪开关 */
@@ -71190,11 +71549,11 @@ index 0000000..41c15ad
 +/* 任务模块裁剪开关 */
 +#define OS_INCLUDE_TASK                                 YES
 +/* 最大支持的任务数,最大共支持254个 */
-+#define OS_TSK_MAX_SUPPORT_NUM                          8
++#define OS_TSK_MAX_SUPPORT_NUM                          15
 +/* 缺省的任务栈大小 */
-+#define OS_TSK_DEFAULT_STACK_SIZE                       0x800
++#define OS_TSK_DEFAULT_STACK_SIZE                       1024
 +/* IDLE任务栈的大小 */
-+#define OS_TSK_IDLE_STACK_SIZE                          0x800
++#define OS_TSK_IDLE_STACK_SIZE                          800
 +/* 任务栈初始化魔术字，默认是0xCA，只支持配置一个字节 */
 +#define OS_TSK_STACK_MAGIC_WORD                         0xCA
 +
@@ -71218,11 +71577,11 @@ index 0000000..41c15ad
 +extern unsigned int __heap_size;
 +#define OS_MEM_FSC_PT_ADDR                              ((uintptr_t)&__heap_start)
 +/* 私有FSC内存分区大小 */
-+#define OS_MEM_FSC_PT_SIZE                              (((unsigned int)&__heap_size) / 2)
++#define OS_MEM_FSC_PT_SIZE                              0xfffc // ((unsigned int)&__heap_size)
 +
 +/* ***************************** 配置信号量管理模块 ************************* */
 +/* 信号量模块裁剪开关 */
-+//#define OS_INCLUDE_SEM                                  YES
++#define OS_INCLUDE_SEM                                  YES
 +
 +/* 最大支持的信号量数 */
 +#define OS_SEM_MAX_SUPPORT_NUM                          20
@@ -71250,22 +71609,37 @@ index 0000000..41c15ad
 +#endif /* TARGET_CONFIG_H */
 diff --git a/stm32f407zg/uniproton/config.gni b/stm32f407zg/uniproton/config.gni
 new file mode 100644
-index 0000000..2130bc4
+index 0000000..16cb5a6
 --- /dev/null
 +++ b/stm32f407zg/uniproton/config.gni
-@@ -0,0 +1,96 @@
+@@ -0,0 +1,115 @@
 +# Copyright (c) 2022 Huawei Device Co., Ltd. All rights reserved.
-+# Licensed under the Apache License, Version 2.0 (the "License");
-+# you may not use this file except in compliance with the License.
-+# You may obtain a copy of the License at
 +#
-+#     http://www.apache.org/licenses/LICENSE-2.0
++# Redistribution and use in source and binary forms, with or without modification,
++# are permitted provided that the following conditions are met:
 +#
-+# Unless required by applicable law or agreed to in writing, software
-+# distributed under the License is distributed on an "AS IS" BASIS,
-+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-+# See the License for the specific language governing permissions and
-+# limitations under the License.
++# 1. Redistributions of source code must retain the above copyright notice, this list of
++#    conditions and the following disclaimer.
++#
++# 2. Redistributions in binary form must reproduce the above copyright notice, this list
++#    of conditions and the following disclaimer in the documentation and/or other materials
++#    provided with the distribution.
++#
++# 3. Neither the name of the copyright holder nor the names of its contributors may be used
++#    to endorse or promote products derived from this software without specific prior written
++#    permission.
++#
++# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
++# "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
++# THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
++# PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
++# CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
++# EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
++# PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
++# OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
++# WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
++# OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
++# ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 +
 +# Kernel type, e.g. "linux", "liteos_a", "liteos_m", "uniproton".
 +kernel_type = "uniproton"
@@ -71300,7 +71674,7 @@ index 0000000..2130bc4
 +
 +# Board related common compile flags.
 +board_cflags = [
-+  "-std=gnu11",
++  "-mcpu=cortex-m4",
 +  "-fno-common",
 +  "-fomit-frame-pointer",
 +  "-fstack-protector-strong",
@@ -71308,16 +71682,24 @@ index 0000000..2130bc4
 +  "-ffunction-sections",
 +  "-fshort-enums",
 +  "-funsigned-char",
++  "-mfloat-abi=softfp",
++  "-mfpu=vfpv4-d16",
++  "-mthumb",
++  "-Wa,-mimplicit-it=thumb",
 +  "-O2",
 +  "-DSECUREC_BUFFER_SIZE=32",
 +  "-D__RTOS__",
 +  "-DOS_DEVICE_CONFIG",
-+  "-nostdinc",
++  "-DSTM32F40XX",
 +]
 +board_cflags += board_opt_flags
 +
 +board_asmflags = [
-+  "-std=gnu11",
++  "-mcpu=cortex-m4",
++  "-mfloat-abi=softfp",
++  "-mfpu=vfpv4-d16",
++  "-mthumb",
++  "-Wa,-mimplicit-it=thumb",
 +  "-fno-common",
 +  "-fomit-frame-pointer",
 +  "-funsigned-char",
@@ -71329,27 +71711,824 @@ index 0000000..2130bc4
 +
 +board_ld_flags = []
 +
-+# Newlib adapt.
-+board_ld_flags += [
-+  "-Wl,--wrap=_free_r",
-+  "-Wl,--wrap,_malloc_usable_size_r",
-+  "-Wl,--wrap,_malloc_r",
-+  "-Wl,--wrap,_memalign_r",
-+  "-Wl,--wrap,_realloc_r",
-+  "-Wl,--wrap,_calloc_r",
-+]
++board_ld_flags += []
 +
 +# Board related headfiles search path.
-+board_include_dirs = [ "//utils/native/lite/include" ]
++board_include_dirs = [
++  "//third_party/mbedtls/include",
++  "//device/soc/st/stm32f407zg/uniproton/hals",
++  "//device/soc/st/stm32f407zg/uniproton/hals/cmsis",
++]
 +
 +# Board adapter dir for OHOS components.
-+board_adapter_dir = ""
++board_adapter_dir = "//device/soc/st/stm32f407zg/uniproton"
 +
 +# Sysroot path.
 +board_configed_sysroot = ""
 +
 +# Board storage type, it used for file system generation.
 +storage_type = "spinor"
+diff --git a/stm32f407zg/uniproton/hals/cmsis/BUILD.gn b/stm32f407zg/uniproton/hals/cmsis/BUILD.gn
+new file mode 100644
+index 0000000..1fc1471
+--- /dev/null
++++ b/stm32f407zg/uniproton/hals/cmsis/BUILD.gn
+@@ -0,0 +1,46 @@
++# Copyright (c) 2022-2022 Huawei Device Co., Ltd. All rights reserved.
++#
++# Redistribution and use in source and binary forms, with or without modification,
++# are permitted provided that the following conditions are met:
++#
++# 1. Redistributions of source code must retain the above copyright notice, this list of
++#    conditions and the following disclaimer.
++#
++# 2. Redistributions in binary form must reproduce the above copyright notice, this list
++#    of conditions and the following disclaimer in the documentation and/or other materials
++#    provided with the distribution.
++#
++# 3. Neither the name of the copyright holder nor the names of its contributors may be used
++#    to endorse or promote products derived from this software without specific prior written
++#    permission.
++#
++# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
++# "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
++# THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
++# PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
++# CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
++# EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
++# PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
++# OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
++# WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
++# OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
++# ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
++
++import("//third_party/cmsis/cmsis.gni")
++
++config("public") {
++  include_dirs = CMSIS_INCLUDE_DIRS + [ "." ]
++  include_dirs += [
++    "//kernel/uniproton/UniProton/src/core/kernel/include",
++    "//kernel/uniproton/UniProton/src/utility/lib/include",
++    "//kernel/uniproton/UniProton/src/arch/include",
++    "//kernel/uniproton/UniProton/src/om/include",
++    "//kernel/uniproton/UniProton/src/mem/include",
++    "//kernel/uniproton/UniProton/src/core/ipc/include",
++  ]
++}
++
++static_library("cmsis") {
++  sources = [ "cmsis_uniproton.c" ]
++  configs += [ ":public" ]
++}
+diff --git a/stm32f407zg/uniproton/hals/cmsis/cmsis_os.h b/stm32f407zg/uniproton/hals/cmsis/cmsis_os.h
+new file mode 100644
+index 0000000..ae92ed4
+--- /dev/null
++++ b/stm32f407zg/uniproton/hals/cmsis/cmsis_os.h
+@@ -0,0 +1,36 @@
++/*
++ * Copyright (c) 2022-2022 Huawei Device Co., Ltd. All rights reserved.
++ *
++ * Redistribution and use in source and binary forms, with or without modification,
++ * are permitted provided that the following conditions are met:
++ *
++ * 1. Redistributions of source code must retain the above copyright notice, this list of
++ *    conditions and the following disclaimer.
++ *
++ * 2. Redistributions in binary form must reproduce the above copyright notice, this list
++ *    of conditions and the following disclaimer in the documentation and/or other materials
++ *    provided with the distribution.
++ *
++ * 3. Neither the name of the copyright holder nor the names of its contributors may be used
++ *    to endorse or promote products derived from this software without specific prior written
++ *    permission.
++ *
++ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
++ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
++ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
++ * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
++ * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
++ * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
++ * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
++ * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
++ * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
++ * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
++ * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
++ */
++
++#ifndef CMSIS_OS_H_
++#define CMSIS_OS_H_
++
++#include "cmsis_os2.h"
++
++#endif /* CMSIS_OS_H_ */
+diff --git a/stm32f407zg/uniproton/hals/cmsis/cmsis_os2.h b/stm32f407zg/uniproton/hals/cmsis/cmsis_os2.h
+new file mode 100644
+index 0000000..eab17ff
+--- /dev/null
++++ b/stm32f407zg/uniproton/hals/cmsis/cmsis_os2.h
+@@ -0,0 +1,31 @@
++/*
++ * Copyright (c) 2022-2022 Huawei Device Co., Ltd. All rights reserved.
++ *
++ * Redistribution and use in source and binary forms, with or without modification,
++ * are permitted provided that the following conditions are met:
++ *
++ * 1. Redistributions of source code must retain the above copyright notice, this list of
++ *    conditions and the following disclaimer.
++ *
++ * 2. Redistributions in binary form must reproduce the above copyright notice, this list
++ *    of conditions and the following disclaimer in the documentation and/or other materials
++ *    provided with the distribution.
++ *
++ * 3. Neither the name of the copyright holder nor the names of its contributors may be used
++ *    to endorse or promote products derived from this software without specific prior written
++ *    permission.
++ *
++ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
++ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
++ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
++ * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
++ * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
++ * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
++ * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
++ * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
++ * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
++ * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
++ * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
++ */
++
++#include "../../../../third_party/cmsis/CMSIS/RTOS2/Include/cmsis_os2.h"
+diff --git a/stm32f407zg/uniproton/hals/cmsis/cmsis_uniproton.c b/stm32f407zg/uniproton/hals/cmsis/cmsis_uniproton.c
+new file mode 100644
+index 0000000..d7fceb2
+--- /dev/null
++++ b/stm32f407zg/uniproton/hals/cmsis/cmsis_uniproton.c
+@@ -0,0 +1,365 @@
++/*
++ * Copyright (c) 2022-2022 Huawei Device Co., Ltd. All rights reserved.
++ *
++ * Redistribution and use in source and binary forms, with or without modification,
++ * are permitted provided that the following conditions are met:
++ *
++ * 1. Redistributions of source code must retain the above copyright notice, this list of
++ *    conditions and the following disclaimer.
++ *
++ * 2. Redistributions in binary form must reproduce the above copyright notice, this list
++ *    of conditions and the following disclaimer in the documentation and/or other materials
++ *    provided with the distribution.
++ *
++ * 3. Neither the name of the copyright holder nor the names of its contributors may be used
++ *    to endorse or promote products derived from this software without specific prior written
++ *    permission.
++ *
++ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
++ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
++ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
++ * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
++ * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
++ * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
++ * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
++ * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
++ * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
++ * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
++ * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
++ */
++
++#include "cmsis_os2.h"
++#include "prt_config.h"
++#include "prt_event.h"
++#include "prt_mem.h"
++#include "prt_hwi.h"
++#include "prt_queue.h"
++#include "prt_sem.h"
++#include "prt_tick.h"
++#include "prt_task.h"
++#include "prt_timer.h"
++#include "prt_task_external.h"
++#include "prt_queue_external.h"
++#include "prt_sem_external.h"
++
++#include "string.h"
++#include "securec.h"
++
++/* Kernel initialization state */
++static osKernelState_t g_kernelState;
++
++#define OS_BASE_CORE_TSK_DEFAULT_PRIO OS_TSK_PRIORITY_10
++/* OS_BASE_CORE_TSK_DEFAULT_PRIO <---> osPriorityNormal */
++#define OS_PRIORITY(cmsisPriority) (OS_BASE_CORE_TSK_DEFAULT_PRIO - ((cmsisPriority) - osPriorityNormal))
++#define CMSIS_PRIORITY(losPriority) (osPriorityNormal + (OS_BASE_CORE_TSK_DEFAULT_PRIO - (losPriority)))
++
++#define ISVALID_OS_PRIORITY(losPrio) ((losPrio) > OS_TSK_PRIORITY_00 && (losPrio) < OS_TSK_PRIORITY_31)
++
++const osVersion_t g_stLosVersion = { 001, 001 };
++
++#define LITEOS_VERSION_MAJOR 1
++#define LITEOS_VERSION_MINOR 0
++#define LITEOS_VERSION_BUILD 0
++
++/* Kernel version and identification string definition */
++#define KERNEL_VERSION            (((U32)LITEOS_VERSION_MAJOR * 10000000UL) | \
++                                   ((U32)LITEOS_VERSION_MINOR *    10000UL) | \
++                                   ((U32)LITEOS_VERSION_BUILD *        1UL))
++
++#define KERNEL_ID "HUAWEI-UniProton"
++
++#define KERNEL_UNLOCKED 0
++#define KERNEL_LOCKED   1
++
++int32_t osKernelLock(void)
++{
++    int32_t lock;
++
++    if (OS_INT_ACTIVE) {
++        return (int32_t)osErrorISR;
++    }
++
++    if (OS_TASK_LOCK_DATA > 0) {
++        lock = KERNEL_LOCKED;
++    } else {
++        PRT_TaskLock();
++        lock = KERNEL_UNLOCKED;
++    }
++
++    return lock;
++}
++
++int32_t osKernelUnlock(void)
++{
++    int32_t lock;
++
++    if (OS_INT_ACTIVE) {
++        return (int32_t)osErrorISR;
++    }
++
++    if (OS_TASK_LOCK_DATA > 0) {
++        PRT_TaskUnlock();
++        if (OS_TASK_LOCK_DATA != 0) {
++            return (int32_t)osError;
++        }
++        lock = KERNEL_LOCKED;
++    } else {
++        lock = KERNEL_UNLOCKED;
++    }
++
++    return lock;
++}
++
++osThreadId_t osThreadGetId(void)
++{
++    TskHandle taskId = 0;
++    (void)PRT_TaskSelf(&taskId);
++    return (osThreadId_t)GET_TCB_HANDLE(taskId);
++}
++
++void *osThreadGetArgument(void)
++{
++    struct TskInfo taskInfo = {0};
++
++    if (OS_INT_ACTIVE) {
++        return 0;
++    }
++
++    struct TagTskCb *taskCb = (struct TagTskCb *)osThreadGetId();
++    if (taskCb == NULL) {
++        return NULL;
++    }
++    return (void *)(taskCb->args[0]);
++}
++
++uint32_t osKernelGetTickCount(void)
++{
++    uint64_t ticks = PRT_TickGetCount();
++    return (uint32_t)ticks;
++}
++
++uint32_t osKernelGetTickFreq(void)
++{
++    return (uint32_t)OS_TICK_PER_SECOND;
++}
++
++//  ==== Thread Management Functions ====
++osThreadId_t osThreadNew(osThreadFunc_t func, void *argument, const osThreadAttr_t *attr)
++{
++    U32 tid;
++    U32 ret;
++    osThreadAttr_t attrTemp = {0};
++    struct TskInitParam stTskInitParam = {0};
++    U16 priority;
++
++    if (OS_INT_ACTIVE || (func == NULL)) {
++        return (osThreadId_t)NULL;
++    }
++
++    if (attr == NULL) {
++        attrTemp.priority = osPriorityNormal,
++        attr = &attrTemp;
++    }
++
++    priority = OS_PRIORITY(attr->priority);
++    if (!ISVALID_OS_PRIORITY(priority)) {
++        /* unsupported priority */
++        return (osThreadId_t)NULL;
++    }
++    stTskInitParam.taskEntry = (TskEntryFunc)func;
++    stTskInitParam.args[0] = (U32)argument;
++    if ((attr->stack_mem != NULL) && (attr->stack_size != 0)) {
++        stTskInitParam.stackAddr = (uintptr_t)attr->stack_mem;
++        stTskInitParam.stackSize = attr->stack_size;
++    } else if (attr->stack_size != 0) {
++        stTskInitParam.stackSize = attr->stack_size;
++    } else {
++        stTskInitParam.stackSize = OS_TSK_DEFAULT_STACK_SIZE;
++    }
++    if (attr->name != NULL) {
++        stTskInitParam.name = (char *)attr->name;
++    } else {
++        stTskInitParam.name = "CmsisTask";
++    }
++    stTskInitParam.taskPrio = priority;
++    ret = PRT_TaskCreate(&tid, &stTskInitParam);
++    if (ret != OS_OK) {
++        return (osThreadId_t)NULL;
++    }
++
++    ret = PRT_TaskResume(tid);
++    if (ret != OS_OK) {
++        (void)PRT_TaskDelete(tid);
++        return (osThreadId_t)NULL;
++    }
++
++    return (osThreadId_t)GET_TCB_HANDLE(tid);
++}
++
++uint32_t osThreadGetCount(void)
++{
++    uint32_t count = 0;
++
++    if (OS_INT_ACTIVE) {
++        return 0U;
++    }
++
++    for (TskHandle index = 0; index <= OS_TSK_MAX_SUPPORT_NUM; index++) {
++        TskStatus status = PRT_TaskGetStatus(index);
++        if ((status != (TskStatus)OS_INVALID) && (status & OS_TSK_INUSE)) {
++            count++;
++        }
++    }
++
++    return count;
++}
++
++void osThreadExit(void)
++{
++    TskHandle taskId = 0;
++    (void)PRT_TaskSelf(&taskId);
++    (void)PRT_TaskDelete(taskId);
++    //UNREACHABLE;
++}
++
++osMutexId_t osMutexNew(const osMutexAttr_t *attr)
++{
++    U32 ret;
++    SemHandle muxId;
++
++    (void)attr;
++
++    ret = PRT_SemCreate(1, &muxId);
++    if (ret == OS_OK) {
++        return (osMutexId_t)GET_SEM(muxId);
++    } else {
++        return (osMutexId_t)NULL;
++    }
++}
++
++osStatus_t osMutexAcquire(osMutexId_t mutex_id, uint32_t timeout)
++{
++    struct TagSemCb *semCb = (struct TagSemCb *)mutex_id;
++    if (semCb == NULL) {
++        return osErrorParameter;
++    }
++
++    U32 ret = PRT_SemPend(semCb->semId, timeout);
++    if (ret == OS_OK) {
++        return osOK;
++    } else if (ret == OS_ERRNO_SEM_INVALID) {
++        return osErrorParameter;
++    } else if (ret == OS_ERRNO_SEM_TIMEOUT) {
++        return osErrorTimeout;
++    } else {
++        return osErrorResource;
++    }
++}
++
++osStatus_t osMutexRelease(osMutexId_t mutex_id)
++{
++    struct TagSemCb *semCb = (struct TagSemCb *)mutex_id;
++    if (semCb == NULL) {
++        return osErrorParameter;
++    }
++
++    U32 ret = PRT_SemPost(semCb->semId);
++    if (ret == OS_OK) {
++        return osOK;
++    } else if (ret == OS_ERRNO_SEM_INVALID) {
++        return osErrorParameter;
++    } else {
++        return osErrorResource;
++    }
++}
++
++typedef enum {
++    ATTR_CAPACITY = 0,
++    ATTR_MSGSIZE = 1,
++    ATTR_COUNT = 2,
++    ATTR_SPACE = 3
++} QueueAttribute;
++
++osMessageQueueId_t osMessageQueueNew(uint32_t msg_count, uint32_t msg_size, const osMessageQueueAttr_t *attr)
++{
++    U32 queueId;
++    U32 ret;
++    osMessageQueueId_t handle;
++
++    if ((msg_count == 0) || (msg_size == 0) || OS_INT_ACTIVE) {
++        return (osMessageQueueId_t)NULL;
++    }
++
++    ret = PRT_QueueCreate((U16)msg_count, (U16)msg_size, &queueId);
++    if (ret == OS_OK) {
++        handle = (osMessageQueueId_t)queueId;
++    } else {
++        handle = (osMessageQueueId_t)NULL;
++    }
++
++    return handle;
++}
++
++static osStatus_t osMessageQueueOp(osMessageQueueId_t mq_id, void *msg_ptr, U32 timeout, int rw)
++{
++    struct TagQueCb *queueCb = (struct TagQueCb *)GET_QUEUE_HANDLE(OS_QUEUE_INNER_ID((U32)mq_id));
++    U32 ret;
++    U32 bufferSize;
++
++    if ((queueCb == NULL) || (msg_ptr == NULL) || (OS_INT_ACTIVE && (timeout != 0))) {
++        return osErrorParameter;
++    }
++
++    bufferSize = (U32)(queueCb->nodeSize - OS_QUEUE_NODE_HEAD_LEN);
++    if (rw == 0) {
++        ret = PRT_QueueWrite(mq_id, msg_ptr, bufferSize, timeout, OS_QUEUE_NORMAL);
++    } else {
++        ret = PRT_QueueRead(mq_id, msg_ptr, &bufferSize, timeout);
++    }
++
++    if (ret == OS_OK) {
++        return osOK;
++    } else if ((ret == OS_ERRNO_QUEUE_INVALID) || (ret == OS_ERRNO_QUEUE_PTR_NULL) ||
++               (OS_ERRNO_QUEUE_SIZE_ZERO) || (OS_ERRNO_QUEUE_PRIO_INVALID) || (OS_ERRNO_QUEUE_NOT_CREATE)) {
++        return osErrorParameter;
++    } else if (ret == OS_ERRNO_QUEUE_TIMEOUT) {
++        return osErrorTimeout;
++    } else {
++        return osErrorResource;
++    }
++}
++
++osStatus_t osMessageQueuePut(osMessageQueueId_t mq_id, const void *msg_ptr, uint8_t msg_prio, uint32_t timeout)
++{
++    (void)msg_prio;
++    return osMessageQueueOp(mq_id, (void *)msg_ptr, (U32)timeout, 0);
++}
++
++osStatus_t osMessageQueueGet(osMessageQueueId_t mq_id, void *msg_ptr, uint8_t *msg_prio, uint32_t timeout)
++{
++    (void)msg_prio;
++    return osMessageQueueOp(mq_id, (void *)msg_ptr, (U32)timeout, 1);
++}
++
++osStatus_t osMessageQueueDelete(osMessageQueueId_t mq_id)
++{
++    U32 ret;
++    if (OS_INT_ACTIVE) {
++        return osErrorISR;
++    }
++
++    ret = PRT_QueueDelete((U32)mq_id);
++    if (ret == OS_OK) {
++        return osOK;
++    } else if (ret == OS_ERRNO_QUEUE_INVALID || ret == OS_ERRNO_QUEUE_NOT_CREATE) {
++        return osErrorParameter;
++    } else {
++        return osErrorResource;
++    }
++}
++
++unsigned sleep(unsigned time)
++{
++    U32 ticks = time * OS_TICK_PER_SECOND;
++    PRT_TaskDelay(ticks);
++}
+diff --git a/stm32f407zg/uniproton/hals/cmsis/hos_cmsis_adp.h b/stm32f407zg/uniproton/hals/cmsis/hos_cmsis_adp.h
+new file mode 100644
+index 0000000..017fb6d
+--- /dev/null
++++ b/stm32f407zg/uniproton/hals/cmsis/hos_cmsis_adp.h
+@@ -0,0 +1,43 @@
++/*
++ * Copyright (c) 2022-2022 Huawei Device Co., Ltd. All rights reserved.
++ *
++ * Redistribution and use in source and binary forms, with or without modification,
++ * are permitted provided that the following conditions are met:
++ *
++ * 1. Redistributions of source code must retain the above copyright notice, this list of
++ *    conditions and the following disclaimer.
++ *
++ * 2. Redistributions in binary form must reproduce the above copyright notice, this list
++ *    of conditions and the following disclaimer in the documentation and/or other materials
++ *    provided with the distribution.
++ *
++ * 3. Neither the name of the copyright holder nor the names of its contributors may be used
++ *    to endorse or promote products derived from this software without specific prior written
++ *    permission.
++ *
++ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
++ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
++ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
++ * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
++ * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
++ * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
++ * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
++ * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
++ * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
++ * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
++ * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
++ */
++
++#ifndef HOS_CMSIS_ADP_H
++#define HOS_CMSIS_ADP_H
++
++#include "cmsis_os.h"
++#include "prt_typedef.h"
++
++typedef struct {
++    osSemaphoreAttr_t attr;
++    U32 maxCount;
++    U32 initialCount;
++} SemaphoreEx;
++
++#endif
+diff --git a/stm32f407zg/uniproton/hals/hal_trace.h b/stm32f407zg/uniproton/hals/hal_trace.h
+new file mode 100644
+index 0000000..f999e74
+--- /dev/null
++++ b/stm32f407zg/uniproton/hals/hal_trace.h
+@@ -0,0 +1,36 @@
++/*
++ * Copyright (c) 2022 Huawei Device Co., Ltd.
++ *
++ * Redistribution and use in source and binary forms, with or without modification,
++ * are permitted provided that the following conditions are met:
++ *
++ * 1. Redistributions of source code must retain the above copyright notice, this list of
++ *    conditions and the following disclaimer.
++ *
++ * 2. Redistributions in binary form must reproduce the above copyright notice, this list
++ *    of conditions and the following disclaimer in the documentation and/or other materials
++ *    provided with the distribution.
++ *
++ * 3. Neither the name of the copyright holder nor the names of its contributors may be used
++ *    to endorse or promote products derived from this software without specific prior written
++ *    permission.
++ *
++ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
++ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
++ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
++ * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
++ * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
++ * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
++ * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
++ * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
++ * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
++ * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
++ * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
++ */
++
++#ifndef __HAL_TRACE_H__
++#define __HAL_TRACE_H__
++
++#define TRACE(attr, str, ...)               printf(str, ##__VA_ARGS__)
++
++#endif
+diff --git a/stm32f407zg/uniproton/hals/utils/file/BUILD.gn b/stm32f407zg/uniproton/hals/utils/file/BUILD.gn
+new file mode 100644
+index 0000000..efeac08
+--- /dev/null
++++ b/stm32f407zg/uniproton/hals/utils/file/BUILD.gn
+@@ -0,0 +1,41 @@
++# Copyright (c) 2022 Huawei Device Co., Ltd. All rights reserved.
++#
++# Redistribution and use in source and binary forms, with or without modification,
++# are permitted provided that the following conditions are met:
++#
++# 1. Redistributions of source code must retain the above copyright notice, this list of
++#    conditions and the following disclaimer.
++#
++# 2. Redistributions in binary form must reproduce the above copyright notice, this list
++#    of conditions and the following disclaimer in the documentation and/or other materials
++#    provided with the distribution.
++#
++# 3. Neither the name of the copyright holder nor the names of its contributors may be used
++#    to endorse or promote products derived from this software without specific prior written
++#    permission.
++#
++# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
++# "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
++# THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
++# PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
++# CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
++# EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
++# PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
++# OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
++# WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
++# OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
++# ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
++
++import("//build/lite/config/component/lite_component.gni")
++
++static_library("hal_file_static") {
++  sources = [ "src/hal_file.c" ]
++  include_dirs = [
++    "//commonlibrary/utils_lite/hals/file",
++    "//commonlibrary/utils_lite/include",
++    "//kernel/uniproton/UniProton/src/fs/littlefs/",
++    "//kernel/uniproton/UniProton/src/fs/porting",
++    "//kernel/uniproton/UniProton/src/fs/",
++    "//third_party/littlefs",
++  ]
++}
+diff --git a/stm32f407zg/uniproton/hals/utils/file/src/hal_file.c b/stm32f407zg/uniproton/hals/utils/file/src/hal_file.c
+new file mode 100644
+index 0000000..51845ce
+--- /dev/null
++++ b/stm32f407zg/uniproton/hals/utils/file/src/hal_file.c
+@@ -0,0 +1,155 @@
++/*
++ * Copyright (c) 2022 Huawei Device Co., Ltd.
++ *
++ * Redistribution and use in source and binary forms, with or without modification,
++ * are permitted provided that the following conditions are met:
++ *
++ * 1. Redistributions of source code must retain the above copyright notice, this list of
++ *    conditions and the following disclaimer.
++ *
++ * 2. Redistributions in binary form must reproduce the above copyright notice, this list
++ *    of conditions and the following disclaimer in the documentation and/or other materials
++ *    provided with the distribution.
++ *
++ * 3. Neither the name of the copyright holder nor the names of its contributors may be used
++ *    to endorse or promote products derived from this software without specific prior written
++ *    permission.
++ *
++ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
++ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
++ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
++ * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
++ * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
++ * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
++ * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
++ * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
++ * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
++ * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
++ * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
++ */
++
++#include <sys/types.h>
++#include <sys/stat.h>
++#include <fcntl.h>
++#include <unistd.h>
++#include "hal_trace.h"
++#include "utils_file.h"
++#include "hal_file.h"
++#include "prt_fs.h"
++
++#define FS_DATA_ROOT_DIR      "/data"
++#define FS_DATA_ROOT_DIR_SIZE 5
++#define PATH_NAME_LEN 64
++static int FsRealPath(char *realPath, const char *path)
++{
++    int len = strlen(path);
++    if ((len > FS_DATA_ROOT_DIR_SIZE) && (strncmp(FS_DATA_ROOT_DIR, path, FS_DATA_ROOT_DIR_SIZE) == 0)) {
++        realPath = (char *)path;
++        return 0;
++    }
++
++    if (snprintf_s(realPath, PATH_NAME_LEN, PATH_NAME_LEN - 1, "%s%s%s", FS_DATA_ROOT_DIR, "/", path) <= 0) {
++        return -1;
++    }
++    return 0;
++}
++
++static int CheckPathValid(const char *path)
++{
++    int len = strlen(path);
++    if (len > PATH_NAME_LEN) {
++        printf("path name is too long ,must less than %d", PATH_NAME_LEN);
++        return -1;
++    }
++
++    for (int i = 0; i < len; i++) {
++        if ((int)path[i] == 92) { /* 92: invalid key */
++            return -1;
++        }
++    }
++
++    return 0;
++}
++
++int HalFileOpen(const char *path, int oflag, int mode)
++{
++    char realPath[PATH_NAME_LEN] = {0};
++    (void)mode;
++
++    if (CheckPathValid(path) < 0) {
++        return -1;
++    }
++
++    if (FsRealPath(realPath, path) < 0) {
++        return -1;
++    }
++
++    return open(realPath, oflag);
++}
++
++int HalFileClose(int fd)
++{
++    return close(fd);
++}
++
++int HalFileRead(int fd, char *buf, unsigned int len)
++{
++    if (fd > OS_LFS_MAX_OPEN_FILES) {
++        return -1;
++    }
++
++    return read(fd, buf, len);
++}
++
++int HalFileWrite(int fd, const char *buf, unsigned int len)
++{
++    if (fd > OS_LFS_MAX_OPEN_FILES) {
++        return -1;
++    }
++
++    return write(fd, buf, len);
++}
++
++int HalFileDelete(const char *path)
++{
++    char realPath[PATH_NAME_LEN] = {0};
++    if (FsRealPath(realPath, path) < 0) {
++        return -1;
++    }
++
++    return unlink(realPath);
++}
++
++int HalFileStat(const char *path, unsigned int *fileSize)
++{
++    char realPath[PATH_NAME_LEN] = {0};
++    struct stat st_buf = {0};
++
++    if (FsRealPath(realPath, path) < 0) {
++        return -1;
++    }
++
++    if (stat(realPath, &st_buf) != 0) {
++        return -1;
++    }
++
++    if (fileSize) {
++        *fileSize = st_buf.st_size;
++    }
++
++    return 0;
++}
++
++int HalFileSeek(int fd, int offset, unsigned int whence)
++{
++    if (fd > OS_LFS_MAX_OPEN_FILES) {
++        return -1;
++    }
++
++    int len = (int)lseek(fd, (off_t)0, SEEK_END_FS);
++    if (offset > len) {
++        return -1;
++    }
++
++    return (int)lseek(fd, (off_t)offset, whence);
++}
 -- 
-2.25.1
+2.17.1
 
