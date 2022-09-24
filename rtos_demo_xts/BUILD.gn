@@ -26,6 +26,5 @@
 # OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
 # ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-group("rtos_demo") {
-  deps = [ "app" ]
+group("rtos_demo_xts") {
 }

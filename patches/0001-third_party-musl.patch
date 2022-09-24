@@ -1,9 +1,14 @@
-From 92331eafb5defd179fde9b4b84cff0943c18b131 Mon Sep 17 00:00:00 2001
-From: wangchen <253227059@qq.com>
-Date: Fri, 9 Sep 2022 09:37:19 +0000
-Subject: [PATCH] Signed-off-by: wangchen <253227059@qq.com> Change-Id:
- I2466b069d9d208548cb454c6c00b59259cf1faeb
+From 8b69e1cebcafcfd5eaec925f4c1e8879ba7e18cb Mon Sep 17 00:00:00 2001
+From: zhushengle <zhushengle@huawei.com>
+Date: Sat, 24 Sep 2022 16:01:17 +0800
+Subject: [PATCH] =?UTF-8?q?feat:=20=E6=94=AF=E6=8C=81uniproton=E5=86=85?=
+ =?UTF-8?q?=E6=A0=B8?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
+Signed-off-by: zhushengle <zhushengle@huawei.com>
+Change-Id: If88760acfaaec8049ab68061084cd857328e2f3f
 ---
  BUILD.gn                                      |   17 +-
  porting/uniproton/include/__strerror.h        |  105 +
@@ -228,7 +233,7 @@ Subject: [PATCH] Signed-off-by: wangchen <253227059@qq.com> Change-Id:
  porting/uniproton/include/wchar.h             |  207 ++
  porting/uniproton/include/wctype.h            |   79 +
  porting/uniproton/include/wordexp.h           |   41 +
- porting/uniproton/kernel/BUILD.gn             |   66 +
+ porting/uniproton/kernel/BUILD.gn             |   68 +
  porting/uniproton/kernel/musl.gni             |   68 +
  .../kernel/src/__ctype_get_mb_cur_max.c       |    7 +
  .../uniproton/kernel/src/__errno_location.c   |    9 +
@@ -266,7 +271,7 @@ Subject: [PATCH] Signed-off-by: wangchen <253227059@qq.com> Change-Id:
  porting/uniproton/kernel/src/wcrtomb.c        |   39 +
  porting/uniproton/kernel/src/wctomb.c         |    8 +
  porting/uniproton/kernel/src/write.c          |    8 +
- 261 files changed, 21201 insertions(+), 5 deletions(-)
+ 261 files changed, 21203 insertions(+), 5 deletions(-)
  create mode 100644 porting/uniproton/include/__strerror.h
  create mode 100644 porting/uniproton/include/aio.h
  create mode 100644 porting/uniproton/include/alloca.h
@@ -21106,10 +21111,10 @@ index 00000000..5460002d
 +#endif
 diff --git a/porting/uniproton/kernel/BUILD.gn b/porting/uniproton/kernel/BUILD.gn
 new file mode 100644
-index 00000000..814d31b2
+index 00000000..b62bba18
 --- /dev/null
 +++ b/porting/uniproton/kernel/BUILD.gn
-@@ -0,0 +1,66 @@
+@@ -0,0 +1,68 @@
 +# Copyright (c) 2013-2019 Huawei Technologies Co., Ltd. All rights reserved.
 +# Copyright (c) 2020-2022 Huawei Device Co., Ltd. All rights reserved.
 +#
@@ -21156,11 +21161,13 @@ index 00000000..814d31b2
 +  ]
 +
 +  include_dirs += [
-+    "//kernel/uniproton/kernel/arch/include",
-+    "//kernel/uniproton/kernel/include", 
-+    "//kernel/uniproton/utils",
-+    "//kernel/uniproton/UniProton/src/mem",
++    "//kernel/uniproton/UniProton/src/arch/include",
 +    "//kernel/uniproton/UniProton/src/include",
++    "//kernel/uniproton/UniProton/src/utility/lib/include",
++    "//kernel/uniproton/UniProton/src/mem",
++    "//kernel/uniproton/UniProton/src/mem/include",
++    "//kernel/uniproton/UniProton/src/include",
++    "//kernel/uniproton/UniProton/src/om/include",
 +    "//third_party/musl/porting/uniproton/include",
 +  ]
 +
@@ -23295,5 +23302,5 @@ index 00000000..2919151e
 +	return syscall_cp(1, fd, buf, count);
 +}
 -- 
-2.25.1
+2.17.1
 
