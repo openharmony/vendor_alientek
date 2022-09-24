@@ -11,6 +11,7 @@
 
 //vendor/ohos
   | rtos_demo     --- 基础能力验证demo
+  | rtos_demo_xts --- xts
 ```
 
 ## 使用说明

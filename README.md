@@ -11,6 +11,7 @@ The repository is mainly developed by OpenHarmony community, rather than the typ
 
 //vendor/ohos
   | rtos_demo     --- Basic competence verification demo
+  | rtos_demo_xts --- Basic competence verification xts demo
 ```
 
 ## Usage
