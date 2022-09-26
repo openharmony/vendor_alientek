@@ -1,14 +1,14 @@
-From 54da22b9776492d3c1a2500f1914b5dadc6898b2 Mon Sep 17 00:00:00 2001
+From f0f3c6b6a8884cc8ecbc6bd7dfd9144bb2e82510 Mon Sep 17 00:00:00 2001
 From: zhushengle <zhushengle@huawei.com>
-Date: Thu, 22 Sep 2022 11:38:29 +0800
-Subject: [PATCH] =?UTF-8?q?feat:=20=E6=94=AF=E6=8C=81uniproton=E5=86=85?=
+Date: Mon, 26 Sep 2022 11:52:46 +0800
+Subject: [PATCH] =?UTF-8?q?feat:=20=E6=94=AF=E6=8C=81UniProton=E5=86=85?=
  =?UTF-8?q?=E6=A0=B8?=
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
 Signed-off-by: zhushengle <zhushengle@huawei.com>
-Change-Id: Ia56aa713233607e9cf746e3e4d7fe3691c65d88d
+Change-Id: Id7d76d36d3fee76637a4edd39472bd206c8fcc3f
 ---
  stm32f407zg/BUILD.gn                          |   30 +
  stm32f407zg/uniproton/BUILD.gn                |   38 +
@@ -110,8 +110,9 @@ Change-Id: Ia56aa713233607e9cf746e3e4d7fe3691c65d88d
  .../uniproton/board/USER/system_stm32f4xx.c   | 1130 ++
  .../uniproton/board/USER/system_stm32f4xx.h   |  105 +
  stm32f407zg/uniproton/board/fs/fs_porting.c   |  203 +
+ stm32f407zg/uniproton/board/prt_buildef.h     |   50 +
+ stm32f407zg/uniproton/board/prt_config.h      |  119 +
  stm32f407zg/uniproton/board/rtos.ld           |  201 +
- stm32f407zg/uniproton/board/target_config.h   |  108 +
  stm32f407zg/uniproton/config.gni              |  115 +
  stm32f407zg/uniproton/hals/cmsis/BUILD.gn     |   46 +
  stm32f407zg/uniproton/hals/cmsis/cmsis_os.h   |   36 +
@@ -121,7 +122,7 @@ Change-Id: Ia56aa713233607e9cf746e3e4d7fe3691c65d88d
  stm32f407zg/uniproton/hals/hal_trace.h        |   36 +
  .../uniproton/hals/utils/file/BUILD.gn        |   41 +
  .../uniproton/hals/utils/file/src/hal_file.c  |  155 +
- 111 files changed, 71628 insertions(+)
+ 112 files changed, 71689 insertions(+)
  create mode 100644 stm32f407zg/BUILD.gn
  create mode 100644 stm32f407zg/uniproton/BUILD.gn
  create mode 100644 stm32f407zg/uniproton/board/ARCH/ethernetif.c
@@ -222,8 +223,9 @@ Change-Id: Ia56aa713233607e9cf746e3e4d7fe3691c65d88d
  create mode 100644 stm32f407zg/uniproton/board/USER/system_stm32f4xx.c
  create mode 100644 stm32f407zg/uniproton/board/USER/system_stm32f4xx.h
  create mode 100644 stm32f407zg/uniproton/board/fs/fs_porting.c
+ create mode 100755 stm32f407zg/uniproton/board/prt_buildef.h
+ create mode 100644 stm32f407zg/uniproton/board/prt_config.h
  create mode 100644 stm32f407zg/uniproton/board/rtos.ld
- create mode 100644 stm32f407zg/uniproton/board/target_config.h
  create mode 100644 stm32f407zg/uniproton/config.gni
  create mode 100644 stm32f407zg/uniproton/hals/cmsis/BUILD.gn
  create mode 100644 stm32f407zg/uniproton/hals/cmsis/cmsis_os.h
@@ -71286,6 +71288,187 @@ index 0000000..29c4dbe
 +    return LfsLowLevelInit();
 +}
 +
+diff --git a/stm32f407zg/uniproton/board/prt_buildef.h b/stm32f407zg/uniproton/board/prt_buildef.h
+new file mode 100755
+index 0000000..9a8fbdb
+--- /dev/null
++++ b/stm32f407zg/uniproton/board/prt_buildef.h
+@@ -0,0 +1,50 @@
++/*
++ * Copyright (c) 2022-2022 Huawei Technologies Co., Ltd. All rights reserved.
++ *
++ * UniProton is licensed under Mulan PSL v2.
++ * You can use this software according to the terms and conditions of the Mulan PSL v2.
++ * You may obtain a copy of Mulan PSL v2 at:
++ *          http://license.coscl.org.cn/MulanPSL2
++ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND,
++ * EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT,
++ * MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
++ * See the Mulan PSL v2 for more details.
++ * Create: 2022-09-21
++ * Description: UniProton配置私有文件。
++ */
++#ifndef _PRT_BUILDEF_H
++#define _PRT_BUILDEF_H
++
++#ifdef OS_ARCH_ARMV7_M
++#include "os_attr_armv7_m_external.h"
++#endif
++
++#ifdef __cplusplus
++#if __cplusplus
++extern "C" {
++#endif /* __cplusplus */
++#endif /* __cplusplus */
++
++#define OS_TSK_NUM_OF_PRIORITIES 32
++
++#define OS_TSK_PRIORITY_LOWEST (OS_TSK_NUM_OF_PRIORITIES - 1)
++
++#define OS_TSK_STACK_ADDR_ALIGN 16
++
++#define OS_REGISTER_ID 0
++
++#define OS_INIT_ID 1
++
++#define OS_TSK_CORE_BYTES_IN_PID 3
++
++#undef OS_HARDWARE_PLATFORM
++#define OS_HARDWARE_PLATFORM 4
++#define OS_CORTEX_M4 4
++
++#ifdef __cplusplus
++#if __cplusplus
++}
++#endif /* __cplusplus */
++#endif /* __cplusplus */
++
++#endif /* _PRT_BUILDEF_H */
+diff --git a/stm32f407zg/uniproton/board/prt_config.h b/stm32f407zg/uniproton/board/prt_config.h
+new file mode 100644
+index 0000000..c0e4ff4
+--- /dev/null
++++ b/stm32f407zg/uniproton/board/prt_config.h
+@@ -0,0 +1,119 @@
++/*
++ * Copyright (c) 2009-2022 Huawei Technologies Co., Ltd. All rights reserved.
++ *
++ * UniProton is licensed under Mulan PSL v2.
++ * You can use this software according to the terms and conditions of the Mulan PSL v2.
++ * You may obtain a copy of Mulan PSL v2 at:
++ *          http://license.coscl.org.cn/MulanPSL2
++ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND,
++ * EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT,
++ * MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
++ * See the Mulan PSL v2 for more details.
++ * Create: 2009-12-22
++ * Description: UniProton配置头文件，裁剪开关和配置项。
++ */
++#ifndef PRT_CONFIG_H
++#define PRT_CONFIG_H
++
++#include "prt_typedef.h"
++#include "prt_buildef.h"
++
++#ifdef __cplusplus
++#if __cplusplus
++extern "C" {
++#endif
++#endif
++
++/* ***************************** 配置系统基本信息 ******************************* */
++/* 芯片主频 */
++extern unsigned SystemCoreClock;
++#define OS_SYS_CLOCK                                    SystemCoreClock
++
++/* ***************************** 中断模块配置 ************************** */
++/* 硬中断最大支持个数 */
++#define OS_HWI_MAX_NUM_CONFIG                           150
++
++/* ***************************** 配置Tick中断模块 *************************** */
++/* Tick中断模块裁剪开关 */
++#define OS_INCLUDE_TICK                                 YES
++/* Tick中断时间间隔，tick处理时间不能超过1/OS_TICK_PER_SECOND(s) */
++#define OS_TICK_PER_SECOND                              1000
++
++/* ***************************** 配置定时器模块 ***************************** */
++/* 基于TICK的软件定时器裁剪开关 */
++#define OS_INCLUDE_TICK_SWTMER                          YES
++/* 基于TICK的软件定时器最大个数 */
++#define OS_TICK_SWITIMER_MAX_NUM                        8
++
++/* ***************************** 配置任务模块 ******************************* */
++/* 任务模块裁剪开关 */
++#define OS_INCLUDE_TASK                                 YES
++/* 最大支持的任务数,最大共支持254个 */
++#define OS_TSK_MAX_SUPPORT_NUM                          15
++/* 缺省的任务栈大小 */
++#define OS_TSK_DEFAULT_STACK_SIZE                       1024
++/* IDLE任务栈的大小 */
++#define OS_TSK_IDLE_STACK_SIZE                          800
++/* 任务栈初始化魔术字，默认是0xCA，只支持配置一个字节 */
++#define OS_TSK_STACK_MAGIC_WORD                         0xCA
++
++/* ***************************** 配置CPU占用率及CPU告警模块 **************** */
++/* CPU占用率模块裁剪开关 */
++#define OS_INCLUDE_CPUP                                 YES
++/* 采样时间间隔(单位tick)，若其值大于0，则作为采样周期，否则两次调用PRT_CpupNow或PRT_CpupThread间隔作为周期 */
++#define OS_CPUP_SAMPLE_INTERVAL                         0
++/* CPU占用率告警动态配置项 */
++#define OS_CONFIG_CPUP_WARN                             NO
++/* CPU占用率告警阈值(精度为万分比) */
++#define OS_CPUP_SHORT_WARN                              0
++/* CPU占用率告警恢复阈值(精度为万分比) */
++#define OS_CPUP_SHORT_RESUME                            0
++
++/* ***************************** 配置内存管理模块 ************************** */
++/* 用户可以创建的最大分区数，取值范围[0,253] */
++#define OS_MEM_MAX_PT_NUM                               1
++/* 私有FSC内存分区起始地址 */
++extern unsigned int __heap_start;
++extern unsigned int __heap_size;
++#define OS_MEM_FSC_PT_ADDR                              ((uintptr_t)&__heap_start)
++/* 私有FSC内存分区大小 */
++#define OS_MEM_FSC_PT_SIZE                              0xfffc // ((unsigned int)&__heap_size)
++
++/* ***************************** 配置信号量管理模块 ************************* */
++/* 信号量模块裁剪开关 */
++#define OS_INCLUDE_SEM                                  YES
++
++/* 最大支持的信号量数 */
++#define OS_SEM_MAX_SUPPORT_NUM                          20
++
++/* ***************************** 配置队列模块 ******************************* */
++/* 队列模块裁剪开关 */
++#define OS_INCLUDE_QUEUE                                YES
++/* 最大支持的队列数,范围(0,0xFFFF] */
++#define OS_QUEUE_MAX_SUPPORT_NUM                        10
++
++#define OS_OPTION_TASK_DELETE                           1
++
++/* ************************* 钩子模块配置 *********************************** */
++/* 硬中断进入钩子最大支持个数, 范围[0, 255] */
++#define OS_HOOK_HWI_ENTRY_NUM                           0
++/* 硬中断退出钩子最大支持个数, 范围[0, 255] */
++#define OS_HOOK_HWI_EXIT_NUM                            0
++/* 任务切换钩子最大支持个数, 范围[0, 255] */
++#define OS_HOOK_TSK_SWITCH_NUM                          0
++/* IDLE钩子最大支持个数, 范围[0, 255] */
++#define OS_HOOK_IDLE_NUM                                0
++
++typedef enum OsinitPhaseId {
++    OS_MOUDLE_REG,
++    OS_MOUDLE_INIT,
++    OS_MOUDLE_CONFIG = 2,
++};
++
++#ifdef __cplusplus
++#if __cplusplus
++}
++#endif /* __cpluscplus */
++#endif /* __cpluscplus */
++
++#endif /* TARGET_CONFIG_H */
 diff --git a/stm32f407zg/uniproton/board/rtos.ld b/stm32f407zg/uniproton/board/rtos.ld
 new file mode 100644
 index 0000000..cb87886
@@ -71493,120 +71676,6 @@ index 0000000..cb87886
 +    end = .;
 +    /DISCARD/ : { *(.note.GNU-stack) *(.gnu_debuglink) *(.gnu.lto_*) }
 +}
-diff --git a/stm32f407zg/uniproton/board/target_config.h b/stm32f407zg/uniproton/board/target_config.h
-new file mode 100644
-index 0000000..8ab59af
---- /dev/null
-+++ b/stm32f407zg/uniproton/board/target_config.h
-@@ -0,0 +1,108 @@
-+/*
-+ * Copyright (c) 2009-2022 Huawei Technologies Co., Ltd. All rights reserved.
-+ *
-+ * UniProton is licensed under Mulan PSL v2.
-+ * You can use this software according to the terms and conditions of the Mulan PSL v2.
-+ * You may obtain a copy of Mulan PSL v2 at:
-+ *          http://license.coscl.org.cn/MulanPSL2
-+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND,
-+ * EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT,
-+ * MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
-+ * See the Mulan PSL v2 for more details.
-+ * Create: 2009-12-22
-+ * Description: UniProton配置头文件，裁剪开关和配置项。
-+ */
-+#ifndef TARGET_CONFIG_H
-+#define TARGET_CONFIG_H
-+
-+#include "prt_buildef.h"
-+
-+#ifdef __cplusplus
-+#if __cplusplus
-+extern "C" {
-+#endif
-+#endif
-+
-+/* ***************************** 配置系统基本信息 ******************************* */
-+/* 芯片主频 */
-+extern unsigned SystemCoreClock;
-+#define OS_SYS_CLOCK                                    SystemCoreClock
-+
-+/* ***************************** 中断模块配置 ************************** */
-+/* 硬中断最大支持个数 */
-+#define OS_HWI_MAX_NUM_CONFIG                           150
-+
-+/* ***************************** 配置Tick中断模块 *************************** */
-+/* Tick中断模块裁剪开关 */
-+#define OS_INCLUDE_TICK                                 YES
-+/* Tick中断时间间隔，tick处理时间不能超过1/OS_TICK_PER_SECOND(s) */
-+#define OS_TICK_PER_SECOND                              1000
-+
-+/* ***************************** 配置定时器模块 ***************************** */
-+/* 基于TICK的软件定时器裁剪开关 */
-+#define OS_INCLUDE_TICK_SWTMER                          YES
-+/* 基于TICK的软件定时器最大个数 */
-+#define OS_TICK_SWITIMER_MAX_NUM                        8
-+
-+/* ***************************** 配置任务模块 ******************************* */
-+/* 任务模块裁剪开关 */
-+#define OS_INCLUDE_TASK                                 YES
-+/* 最大支持的任务数,最大共支持254个 */
-+#define OS_TSK_MAX_SUPPORT_NUM                          15
-+/* 缺省的任务栈大小 */
-+#define OS_TSK_DEFAULT_STACK_SIZE                       1024
-+/* IDLE任务栈的大小 */
-+#define OS_TSK_IDLE_STACK_SIZE                          800
-+/* 任务栈初始化魔术字，默认是0xCA，只支持配置一个字节 */
-+#define OS_TSK_STACK_MAGIC_WORD                         0xCA
-+
-+/* ***************************** 配置CPU占用率及CPU告警模块 **************** */
-+/* CPU占用率模块裁剪开关 */
-+#define OS_INCLUDE_CPUP                                 YES
-+/* 采样时间间隔(单位tick)，若其值大于0，则作为采样周期，否则两次调用PRT_CpupNow或PRT_CpupThread间隔作为周期 */
-+#define OS_CPUP_SAMPLE_INTERVAL                         0
-+/* CPU占用率告警动态配置项 */
-+#define OS_CONFIG_CPUP_WARN                             NO
-+/* CPU占用率告警阈值(精度为万分比) */
-+#define OS_CPUP_SHORT_WARN                              0
-+/* CPU占用率告警恢复阈值(精度为万分比) */
-+#define OS_CPUP_SHORT_RESUME                            0
-+
-+/* ***************************** 配置内存管理模块 ************************** */
-+/* 用户可以创建的最大分区数，取值范围[0,253] */
-+#define OS_MEM_MAX_PT_NUM                               1
-+/* 私有FSC内存分区起始地址 */
-+extern unsigned int __heap_start;
-+extern unsigned int __heap_size;
-+#define OS_MEM_FSC_PT_ADDR                              ((uintptr_t)&__heap_start)
-+/* 私有FSC内存分区大小 */
-+#define OS_MEM_FSC_PT_SIZE                              0xfffc // ((unsigned int)&__heap_size)
-+
-+/* ***************************** 配置信号量管理模块 ************************* */
-+/* 信号量模块裁剪开关 */
-+#define OS_INCLUDE_SEM                                  YES
-+
-+/* 最大支持的信号量数 */
-+#define OS_SEM_MAX_SUPPORT_NUM                          20
-+
-+/* ***************************** 配置队列模块 ******************************* */
-+/* 队列模块裁剪开关 */
-+#define OS_INCLUDE_QUEUE                                YES
-+/* 最大支持的队列数,范围(0,0xFFFF] */
-+#define OS_QUEUE_MAX_SUPPORT_NUM                        10
-+
-+#define OS_OPTION_TASK_DELETE                           1
-+
-+typedef enum OsinitPhaseId {
-+    OS_MOUDLE_REG,
-+    OS_MOUDLE_INIT,
-+    OS_MOUDLE_CONFIG = 2,
-+};
-+
-+#ifdef __cplusplus
-+#if __cplusplus
-+}
-+#endif /* __cpluscplus */
-+#endif /* __cpluscplus */
-+
-+#endif /* TARGET_CONFIG_H */
 diff --git a/stm32f407zg/uniproton/config.gni b/stm32f407zg/uniproton/config.gni
 new file mode 100644
 index 0000000..16cb5a6
@@ -71730,7 +71799,7 @@ index 0000000..16cb5a6
 +storage_type = "spinor"
 diff --git a/stm32f407zg/uniproton/hals/cmsis/BUILD.gn b/stm32f407zg/uniproton/hals/cmsis/BUILD.gn
 new file mode 100644
-index 0000000..1fc1471
+index 0000000..c130750
 --- /dev/null
 +++ b/stm32f407zg/uniproton/hals/cmsis/BUILD.gn
 @@ -0,0 +1,46 @@
@@ -71767,12 +71836,12 @@ index 0000000..1fc1471
 +config("public") {
 +  include_dirs = CMSIS_INCLUDE_DIRS + [ "." ]
 +  include_dirs += [
-+    "//kernel/uniproton/UniProton/src/core/kernel/include",
-+    "//kernel/uniproton/UniProton/src/utility/lib/include",
-+    "//kernel/uniproton/UniProton/src/arch/include",
-+    "//kernel/uniproton/UniProton/src/om/include",
-+    "//kernel/uniproton/UniProton/src/mem/include",
-+    "//kernel/uniproton/UniProton/src/core/ipc/include",
++    "//kernel/uniproton/src/core/kernel/include",
++    "//kernel/uniproton/src/utility/lib/include",
++    "//kernel/uniproton/src/arch/include",
++    "//kernel/uniproton/src/om/include",
++    "//kernel/uniproton/src/mem/include",
++    "//kernel/uniproton/src/core/ipc/include",
 +  ]
 +}
 +
