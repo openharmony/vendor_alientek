@@ -1,14 +1,14 @@
-From 8b69e1cebcafcfd5eaec925f4c1e8879ba7e18cb Mon Sep 17 00:00:00 2001
+From dd169e0e2acb046c04abace2a271d33ed451b6af Mon Sep 17 00:00:00 2001
 From: zhushengle <zhushengle@huawei.com>
-Date: Sat, 24 Sep 2022 16:01:17 +0800
-Subject: [PATCH] =?UTF-8?q?feat:=20=E6=94=AF=E6=8C=81uniproton=E5=86=85?=
+Date: Mon, 26 Sep 2022 12:29:07 +0800
+Subject: [PATCH] =?UTF-8?q?feat:=20=E6=94=AF=E6=8C=81UniProton=E5=86=85?=
  =?UTF-8?q?=E6=A0=B8?=
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
 Signed-off-by: zhushengle <zhushengle@huawei.com>
-Change-Id: If88760acfaaec8049ab68061084cd857328e2f3f
+Change-Id: I358724b11ba37fe5c4eb45dc3a71bc7251c46aa5
 ---
  BUILD.gn                                      |   17 +-
  porting/uniproton/include/__strerror.h        |  105 +
@@ -21111,7 +21111,7 @@ index 00000000..5460002d
 +#endif
 diff --git a/porting/uniproton/kernel/BUILD.gn b/porting/uniproton/kernel/BUILD.gn
 new file mode 100644
-index 00000000..b62bba18
+index 00000000..5a11eaec
 --- /dev/null
 +++ b/porting/uniproton/kernel/BUILD.gn
 @@ -0,0 +1,68 @@
@@ -21161,13 +21161,13 @@ index 00000000..b62bba18
 +  ]
 +
 +  include_dirs += [
-+    "//kernel/uniproton/UniProton/src/arch/include",
-+    "//kernel/uniproton/UniProton/src/include",
-+    "//kernel/uniproton/UniProton/src/utility/lib/include",
-+    "//kernel/uniproton/UniProton/src/mem",
-+    "//kernel/uniproton/UniProton/src/mem/include",
-+    "//kernel/uniproton/UniProton/src/include",
-+    "//kernel/uniproton/UniProton/src/om/include",
++    "//kernel/uniproton/src/arch/include",
++    "//kernel/uniproton/src/include",
++    "//kernel/uniproton/src/utility/lib/include",
++    "//kernel/uniproton/src/mem",
++    "//kernel/uniproton/src/mem/include",
++    "//kernel/uniproton/src/include",
++    "//kernel/uniproton/src/om/include",
 +    "//third_party/musl/porting/uniproton/include",
 +  ]
 +
