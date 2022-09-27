@@ -27,4 +27,5 @@
 # ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 group("rtos_demo_xts") {
+  deps = [ "//base/startup/syspara_lite/frameworks/parameter:parameter_notes" ]
 }
