@@ -24,13 +24,7 @@
       {
         "subsystem": "startup",
         "components": [
-          { "component": "bootstrap_lite", "features": [] },
-          {
-            "component": "syspara_lite",
-            "features": [
-              "enable_ohos_startup_init_lite_use_posix_file_api = false"
-            ]
-          }
+          { "component": "bootstrap_lite", "features": [] }
         ]
       },
       {
