@@ -30,5 +30,5 @@ static_library("app") {
   sources = [
     "app.c",
   ]
-  include_dirs = [ "//utils/native/lite/include" ]
+  include_dirs = [ "//commonlibrary/utils_lite/include" ]
 }
