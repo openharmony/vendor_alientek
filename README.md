@@ -22,7 +22,7 @@ The OpenHarmony uniproton kernel build system is a modular build system based on
 
 ### 1.Setting Up the Environment
 
-Before setting up the environment for a development board, you must set up the basic system environment for OpenHarmony first. The basic system environment includes the OpenHarmony build environment and development environment. For details, see [Setting Up Development Environment](https://gitee.com/openharmony/docs/blob/HEAD/en/device-dev/quick-start/quickstart-lite-env-setup.md).
+Before setting up the environment for a development board, you must set up the basic system environment for OpenHarmony first. The basic system environment includes the OpenHarmony build environment and development environment. For details, see [Setting Up Development Environment](https://gitee.com/openharmony/docs/blob/master/en/device-dev/quick-start/Readme-EN.md).
 
 ### 2.Obtaining the OpenHarmony Source Code
 
